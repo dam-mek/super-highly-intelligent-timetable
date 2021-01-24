@@ -1,13 +1,22 @@
 from telebot import types
+from stuff import get_subclasses
 
-source_markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-source_markup_btn1 = types.KeyboardButton('Перевести текст в синонимы')
-source_markup_btn2 = types.KeyboardButton('/help')
-source_markup_btn3 = types.KeyboardButton('/about')
-source_markup_btn4 = types.KeyboardButton('/feedback')
-source_markup.add(source_markup_btn1)
-source_markup.add(source_markup_btn2)
-source_markup.add(source_markup_btn3)
-source_markup.add(source_markup_btn4)
+
+source = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+source.add(types.KeyboardButton('/feedback'))
+
+numbers_class = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+numbers_class.add(types.KeyboardButton('8'))
+numbers_class.add(types.KeyboardButton('9'))
+numbers_class.add(types.KeyboardButton('10'))
+numbers_class.add(types.KeyboardButton('11'))
+
+letters_class = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+letters_class.add(types.KeyboardButton('А'))
+letters_class.add(types.KeyboardButton('Б'))
+letters_class.add(types.KeyboardButton('В'))
+letters_class.add(types.KeyboardButton('Г'))
+letters_class.add(types.KeyboardButton('Д'))
+
 
 none_markup = types.ReplyKeyboardRemove()
