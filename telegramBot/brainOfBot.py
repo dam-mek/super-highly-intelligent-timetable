@@ -1,7 +1,8 @@
+import telebot
+
 from telegramBot import markups, messages
 from logger import log_this
-
-import telebot
+from database import mediator
 
 # token = environ.get('TOKEN_SHIT')
 import config
@@ -76,6 +77,7 @@ def ask_letter_class(message, information_about_student):
 @log_this
 def ask_subclass(message, information_about_student):
     information_about_student['subclass'] = message.text
+    mediator.add_student(telegram_user_id=message.chat.id, name=information_about_student['name'])
     bot.send_message(chat_id=message.chat.id, text='Hello ' + str(information_about_student),
                      reply_markup=markups.empty)
 
