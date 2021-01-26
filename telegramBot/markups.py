@@ -19,4 +19,12 @@ letters_class.add(types.KeyboardButton('Г'))
 letters_class.add(types.KeyboardButton('Д'))
 
 
-none_markup = types.ReplyKeyboardRemove()
+def get_subclasses_markup(number: str, letter: str):
+    tmp_markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    subclasses = get_subclasses(number=number, letter=letter)
+    tmp_markup.add(types.KeyboardButton(subclasses[0]))
+    tmp_markup.add(types.KeyboardButton(subclasses[1]))
+    return tmp_markup
+
+
+empty = types.ReplyKeyboardRemove()

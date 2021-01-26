@@ -3,7 +3,7 @@ from logger import log_this
 
 import telebot
 
-# token = environ.get('TOKEN_AMB')
+# token = environ.get('TOKEN_SHIT')
 import config
 
 token = config.TOKEN
