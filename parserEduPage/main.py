@@ -1,5 +1,5 @@
 import time
-from parserEduPage import parserEduPage
+import parserEduPage
 
 
 def main(number, letter, subclass, date):
