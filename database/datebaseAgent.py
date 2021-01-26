@@ -34,7 +34,7 @@ class DBAgent:
         self.cursor.execute("""SELECT * FROM class;""")
         return self.cursor.fetchall()
 
-    def get_class(self, number, letter: int, subclass):
+    def get_class(self, number: str, letter: str, subclass: str):
         self.cursor.execute(f"""
         SELECT id 
         FROM class 
