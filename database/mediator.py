@@ -1,4 +1,4 @@
-from database.datebaseAgent import DBAgent
+from database.databaseAgent import DBAgent
 
 
 def get_students():
