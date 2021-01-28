@@ -1,6 +1,18 @@
 from database.databaseAgent import DBAgent
 
 
+def add_student(**information_about_student):
+    database = DBAgent()
+    database.add_student(**information_about_student)
+    database.close()
+
+
+def change_parameter(telegram_user_id: str, parameter: str):
+    database = DBAgent()
+    database.change_parameter(telegram_user_id, parameter)
+    database.close()
+
+
 def get_students():
     database = DBAgent()
     tmp = database.get_students()
@@ -8,10 +20,11 @@ def get_students():
     return tmp
 
 
-def add_student(telegram_user_id: str, name: str):
+def get_parameters_output(telegram_user_id: str):
     database = DBAgent()
-    database.add_student(telegram_user_id=telegram_user_id, name=name)
+    tmp = database.get_parameters_output(telegram_user_id=telegram_user_id)
     database.close()
+    return tmp
 
 
 def get_classes():

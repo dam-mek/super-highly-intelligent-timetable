@@ -3,6 +3,7 @@ import telebot
 from telegramBot import markups, messages
 from logger import log_this
 from database import mediator
+from stuff import get_subclasses
 
 # token = environ.get('TOKEN_SHIT')
 import config
@@ -18,9 +19,9 @@ def start_message(message):
     bot.send_message(chat_id=message.chat.id, text=messages.START)
     bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION)
     bot.register_next_step_handler(
-        message=bot.send_message(chat_id=message.chat.id, text=messages.ASK_SURNAME,
+        message=bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION_ASK_SURNAME,
                                  reply_markup=markups.empty),
-        callback=ask_surname,
+        callback=registration_ask_surname,
         information_about_student=dict(),
     )
     # bot.send_sticker(chat_id=message.chat.id,
@@ -28,92 +29,115 @@ def start_message(message):
 
 
 @log_this
-def ask_surname(message, information_about_student):
+def registration_ask_surname(message, information_about_student):
     information_about_student['surname'] = message.text
     bot.register_next_step_handler(
-        message=bot.send_message(chat_id=message.chat.id, text=messages.ASK_NAME,
+        message=bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION_ASK_NAME,
                                  reply_markup=markups.empty),
-        callback=ask_name,
+        callback=registration_ask_name,
         information_about_student=information_about_student,
     )
 
 
 @log_this
-def ask_name(message, information_about_student):
+def registration_ask_name(message, information_about_student):
     information_about_student['name'] = message.text
     bot.register_next_step_handler(
-        message=bot.send_message(chat_id=message.chat.id, text=messages.ASK_NUMBER_CLASS,
+        message=bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION_ASK_NUMBER_CLASS,
                                  reply_markup=markups.numbers_class),
-        callback=ask_number_class,
+        callback=registration_ask_number_class,
         information_about_student=information_about_student,
     )
 
 
 @log_this
-def ask_number_class(message, information_about_student):
+def registration_ask_number_class(message, information_about_student):
     information_about_student['number_class'] = message.text
     bot.register_next_step_handler(
-        message=bot.send_message(chat_id=message.chat.id, text=messages.ASK_LETTER_CLASS,
+        message=bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION_ASK_LETTER_CLASS,
                                  reply_markup=markups.letters_class),
-        callback=ask_letter_class,
+        callback=registration_ask_letter_class,
         information_about_student=information_about_student,
     )
 
 
 @log_this
-def ask_letter_class(message, information_about_student):
+def registration_ask_letter_class(message, information_about_student):
     information_about_student['letter_class'] = message.text
     bot.register_next_step_handler(
-        message=bot.send_message(chat_id=message.chat.id, text=messages.ASK_SUBCLASS,
+        message=bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION_ASK_SUBCLASS,
                                  reply_markup=markups.get_subclasses_markup(
                                      number=information_about_student['number_class'],
                                      letter=information_about_student['letter_class'],
                                  )),
-        callback=ask_subclass,
+        callback=registration_ask_subclass,
         information_about_student=information_about_student,
     )
 
 
 @log_this
-def ask_subclass(message, information_about_student):
+def registration_ask_subclass(message, information_about_student):
     information_about_student['subclass'] = message.text
-    mediator.add_student(telegram_user_id=message.chat.id, name=information_about_student['name'])
-    bot.send_message(chat_id=message.chat.id, text='Hello ' + str(information_about_student),
-                     reply_markup=markups.empty)
+    mediator.add_student(telegram_user_id=message.chat.id, **information_about_student)
+    welcoming(telegram_user_id=message.chat.id, information_about_student=information_about_student)
 
 
-@bot.message_handler(commands=['help'])
+def welcoming(telegram_user_id, information_about_student):
+    subclasses = get_subclasses(number=information_about_student['number_class'],
+                                letter=information_about_student['letter_class'])
+    another_subclass = subclasses[0] if information_about_student['subclass'] == subclasses[1] else subclasses[1]
+    bot.send_message(chat_id=telegram_user_id, reply_markup=markups.menu,
+                     text=messages.WELCOME.format(**information_about_student, another_subclass=another_subclass))
+
+
+@bot.message_handler(commands=['settings'])
 @log_this
-def help_message(message):
-    bot.send_message(chat_id=message.chat.id, text=messages.HELP, reply_markup=markups.source)
-
-
-@bot.message_handler(commands=['about'])
-@log_this
-def about_message(message):
-    bot.send_message(chat_id=message.chat.id, text=messages.ABOUT, reply_markup=markups.source)
-
-
-@bot.message_handler(commands=['feedback'])
-@log_this
-def feedback_message(message):
-    bot.send_message(chat_id=message.chat.id, text=messages.FEEDBACK, reply_markup=markups.source)
+def command_settings(message):
+    bot.register_next_step_handler(
+        message=bot.send_message(chat_id=message.chat.id, text=messages.SETTINGS_INTRODUCING,
+                                 reply_markup=markups.settings),
+        callback=settings
+    )
 
 
 @bot.message_handler(content_types=['text'])
 @log_this
 def dialogue(message):
-    if do_prikol(message):
-        return
-    if message.text.lower() == 'перевести текст в синонимы':
-        msg = bot.send_message(chat_id=message.chat.id, text=messages.ASK_TEXT, reply_markup=markups.empty)
-        bot.register_next_step_handler(msg, ask_text)
+    if message.text.lower() == 'настройки':
+        bot.register_next_step_handler(
+            message=bot.send_message(chat_id=message.chat.id, text=messages.SETTINGS_INTRODUCING,
+                                     reply_markup=markups.settings),
+            callback=settings
+        )
     else:
         print(message)
-        help_message(message)
+
+
+@log_this
+def settings(message):
+    if message.text.lower() == 'параметры вывода':
+        bot.send_message(chat_id=message.chat.id, text=messages.SETTINGS_PARAMETERS_OUTPUT,
+                         reply_markup=markups.get_parameters_output_inline_markup(
+                             **mediator.get_parameters_output(telegram_user_id=message.chat.id)
+                         ))
+
+    if message.text.lower() == 'в главное меню':
+        bot.send_message(chat_id=message.chat.id, text=messages.SETTINGS_INTRODUCING,
+                         reply_markup=markups.menu)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    if call.data:
+        mediator.change_parameter(telegram_user_id=call.message.chat.id, parameter=call.data)
+        bot.edit_message_reply_markup(chat_id=call.message.chat.id,
+                                      message_id=call.message.message_id,
+                                      reply_markup=markups.get_parameters_output_inline_markup(
+                                          **mediator.get_parameters_output(telegram_user_id=call.message.chat.id)
+                                      ))
 
 
 @bot.message_handler(content_types=['video_note'])
 @log_this
 def video(message):
-    bot.send_message(chat_id=message.chat.id, text=messages.video, reply_markup=markups.source)
+    bot.send_message(chat_id=message.chat.id, text=messages.video, reply_markup=markups.menu)
