@@ -2,18 +2,19 @@ import telebot
 from os import environ
 
 from telegramBot import markups, messages
-from logger import log_this
+from logger import log_this, send_mail
 from database import mediator
 from stuff import get_subclasses
 
 token = environ.get('TOKEN_SHIT')
+print(token)
 bot = telebot.TeleBot(token, parse_mode='markdown')
 
 
 @bot.message_handler(commands=['start'])
 @log_this
 def start_message(message):
-    # send_mail(message)
+    send_mail(message)
     bot.send_message(chat_id=message.chat.id, text=messages.START)
     bot.send_message(chat_id=message.chat.id, text=messages.REGISTRATION)
     bot.register_next_step_handler(
