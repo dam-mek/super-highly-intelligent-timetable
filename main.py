@@ -19,11 +19,11 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://anti-mazur.herokuapp.com/' + token)
+    bot.set_webhook(url='https://super-highly-intelligent-tt.herokuapp.com/' + token)
     return 'Ну типа Super Highly Intelligent Bot запущен, а я нужен для вебхука', 200
 
 
 if __name__ == '__main__':
-    # server.run(host="0.0.0.0", port=int(environ.get('PORT', 5000)))
-    print('lego lego lego')
-    bot.polling(none_stop=True)
+    server.run(host="0.0.0.0", port=int(environ.get('PORT', 5000)))
+    # print('lego lego lego')
+    # bot.polling(none_stop=True)
