@@ -7,7 +7,6 @@ from database import mediator
 from stuff import get_subclasses
 
 token = environ.get('TOKEN_SHIT')
-print(token)
 bot = telebot.TeleBot(token, parse_mode='markdown')
 
 
