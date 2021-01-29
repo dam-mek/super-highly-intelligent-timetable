@@ -1,14 +1,12 @@
 import telebot
+from os import environ
 
 from telegramBot import markups, messages
 from logger import log_this
 from database import mediator
 from stuff import get_subclasses
 
-# token = environ.get('TOKEN_SHIT')
-import config
-
-token = config.TOKEN
+token = environ.get('TOKEN_SHIT')
 bot = telebot.TeleBot(token, parse_mode='markdown')
 
 

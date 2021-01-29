@@ -47,24 +47,35 @@ def get_parameters_output_inline_markup(start_lesson: bool = True,
                                         room_number: bool = True,
                                         teacher_name: bool = True,
                                         subject: bool = True):
-    tmp_markup = types.InlineKeyboardMarkup(row_width=1)
     is_chosen = '🟢'
     is_not_chosen = '🔴'
+    tmp_markup = types.InlineKeyboardMarkup(row_width=1)
+
+    is_chosen_element = is_chosen if start_lesson else is_not_chosen
     button_start_lesson = types.InlineKeyboardButton(
-        text=f'Начало урока: {is_chosen if start_lesson else is_not_chosen}',
+        text=f'{is_chosen_element} Начало урока {is_chosen_element}',
         callback_data='start lesson')
+
+    is_chosen_element = is_chosen if end_lesson else is_not_chosen
     button_end_lesson = types.InlineKeyboardButton(
-        text=f'Конец урока: {is_chosen if end_lesson else is_not_chosen}',
+        text=f'{is_chosen_element} Конец урока {is_chosen_element}',
         callback_data='end lesson')
+
+    is_chosen_element = is_chosen if room_number else is_not_chosen
     button_room_number = types.InlineKeyboardButton(
-        text=f'Номер кабинета: {is_chosen if room_number else is_not_chosen}',
+        text=f'{is_chosen_element} Номер кабинета {is_chosen_element}',
         callback_data='room number')
+
+    is_chosen_element = is_chosen if teacher_name else is_not_chosen
     button_teacher_name = types.InlineKeyboardButton(
-        text=f'Имя учителя: {is_chosen if teacher_name else is_not_chosen}',
+        text=f'{is_chosen_element} Имя учителя {is_chosen_element}',
         callback_data='teacher name')
+
+    is_chosen_element = is_chosen if subject else is_not_chosen
     button_subject = types.InlineKeyboardButton(
-        text=f'Название предмета: {is_chosen if subject else is_not_chosen}',
+        text=f'{is_chosen_element} Название предмета {is_chosen_element}',
         callback_data='subject')
+
     tmp_markup.add(button_start_lesson, button_end_lesson, button_room_number, button_subject, button_teacher_name)
     tmp_markup.add(types.InlineKeyboardButton(text='В главное меню', callback_data='menu'))
     return tmp_markup
