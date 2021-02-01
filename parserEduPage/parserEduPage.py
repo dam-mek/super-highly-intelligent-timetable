@@ -9,8 +9,11 @@ class Parser:
 
     def __init__(self):
         url = 'https://gkl-kemerovo.edupage.org/timetable/'
+        print('lego 1')
         self.session = webdriver.Chrome()
+        print('lego 2')
         self.session.get(url)
+        print('lego 3')
 
     def close(self):
         self.session.close()
@@ -32,8 +35,6 @@ class Parser:
         )
 
         return self.get_time_and_subjects(columns, date)
-
-        # session.close()
 
     def find_needed_class(self, needed_class):
         btn = self.session.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/div/div/div[4]/div/div[1]/span[1]')
