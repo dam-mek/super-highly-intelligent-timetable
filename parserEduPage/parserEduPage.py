@@ -21,19 +21,19 @@ class Parser:
     def get_timetable(self, needed_class, date):
         while True:
             try:
-                # print(needed_class)
                 self.find_needed_class(needed_class)
                 break
             except NoSuchElementException:
                 pass
             except ElementNotInteractableException:
                 pass
+        print('downloaded')
         # time.sleep(1)
         self.find_needed_week(date)
         columns = self.session.find_elements_by_xpath(
             '//*[@id="skin_PageContent_1"]/div[4]/div[1]/div[2]/div/div/div[2]/div[2]/div/div[2]/div'
         )
-
+        print('columns')
         return self.get_time_and_subjects(columns, date)
 
     def find_needed_class(self, needed_class):
@@ -76,6 +76,7 @@ class Parser:
                 day = elem.text.split()
                 if day:
                     dates.append(self.get_date(day[1]))
+        print('week was found')
 
     def get_time_and_subjects(self, days, date):
         """
@@ -83,7 +84,9 @@ class Parser:
         :param date:
         :return: list of raw_subjects
         """
+        print('times 1')
         times = self.get_times()
+        print('times 2')
         date, day_in_week = self.get_date_and_day_in_week(date)
         raw_subjects = {}
         for block in days[day_in_week * 2].find_elements_by_xpath('./div'):
@@ -94,7 +97,7 @@ class Parser:
                     raw_subjects[size_index] = []
                 raw_subjects[size_index].append(block.text)
         subjects = []
-        # print(times)
+        print('letsgoooo')
         for position, information_of_lesson in raw_subjects.items():
             for time_key in range(position[0], position[0] + position[2], 52):
                 subjects.append(self.get_subject(times[time_key], information_of_lesson))
