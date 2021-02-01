@@ -57,6 +57,7 @@ class Parser:
             day = elem.text.split()
             if day:
                 dates.append(self.get_date(day[1]))
+        print(0, dates)
         while dates[day_in_week] < date:
             next_btn = self.session.find_element_by_xpath('//*[@id="skin_PageContent_1"]/div[4]/div[1]/div[1]/span[6]')
             next_btn.click()
@@ -66,7 +67,7 @@ class Parser:
                 day = elem.text.split()
                 if day:
                     dates.append(self.get_date(day[1]))
-
+            print(1, dates)
         while dates[day_in_week] > date:
             prev_btn = self.session.find_element_by_xpath('//*[@id="skin_PageContent_1"]/div[4]/div[1]/div[1]/span[4]')
             prev_btn.click()
@@ -76,6 +77,7 @@ class Parser:
                 day = elem.text.split()
                 if day:
                     dates.append(self.get_date(day[1]))
+            print(2, dates)
         print('week was found')
 
     def get_time_and_subjects(self, days, date):
