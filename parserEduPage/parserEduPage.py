@@ -27,7 +27,7 @@ class Parser:
                 pass
             except ElementNotInteractableException:
                 pass
-        print('downloaded')
+        print('downloaoaded')
         # time.sleep(1)
         self.find_needed_week(date)
         columns = self.session.find_elements_by_xpath(
@@ -142,8 +142,11 @@ class Parser:
     def get_date_and_day_in_week(date: str):
         print(date)
         date = '-'.join([x.rjust(2, '0') for x in date.split('.')[::-1]])
+        print(date)
         date = datetime.date.fromisoformat(date)
+        print(date)
         day_in_week = calendar.weekday(year=date.year, month=date.month, day=date.day)
+        print(day_in_week)
         return date, day_in_week
 
     @staticmethod
