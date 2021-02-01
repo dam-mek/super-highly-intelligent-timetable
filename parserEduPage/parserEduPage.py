@@ -53,6 +53,7 @@ class Parser:
         tmp_xpath = '//*[@id="skin_PageContent_1"]/div[4]/div[1]/div[2]/div/div/div[2]/div[1]/div/div[2]/div'
         date, day_in_week = self.get_date_and_day_in_week(date)
         dates = []
+        print(date, day_in_week)
         for elem in self.session.find_elements_by_xpath(tmp_xpath):
             day = elem.text.split()
             if day:
