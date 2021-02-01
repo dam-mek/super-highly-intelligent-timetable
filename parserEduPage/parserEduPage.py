@@ -6,7 +6,6 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotInterac
 
 
 class Parser:
-    session = None
 
     def __init__(self):
         url = 'https://gkl-kemerovo.edupage.org/timetable/'

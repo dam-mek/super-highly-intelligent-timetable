@@ -2,8 +2,8 @@ import time
 import parserEduPage
 
 
-def main(number, letter, subclass, date):
-
+def main(number, letter, subclass, day, month):
+    date = f'{day}.{month}.2021'
     start_time = time.time()
     tt = parserEduPage.Parser()
     print('Время открытия браузера:', time.time() - start_time)
@@ -21,4 +21,4 @@ def main(number, letter, subclass, date):
 if __name__ == '__main__':
     puts = open('input.txt', 'r', encoding='utf-8').read().split()
     
-    main(puts[0], puts[1], puts[2], puts[3])
+    main(puts[0], puts[1], puts[2], puts[3], puts[4])
