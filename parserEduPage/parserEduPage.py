@@ -28,10 +28,10 @@ class Parser:
             try:
                 self.find_needed_class(needed_class)
                 break
-            except NoSuchElementException:
-                pass
-            except ElementNotInteractableException:
-                pass
+            except NoSuchElementException as e:
+                print(e)
+            except ElementNotInteractableException as e:
+                print(e)
         print('downloaoaded')
         # time.sleep(1)
         self.find_needed_week(date)
