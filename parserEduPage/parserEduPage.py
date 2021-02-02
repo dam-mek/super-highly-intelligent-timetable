@@ -24,15 +24,8 @@ class Parser:
         self.session.close()
 
     def get_timetable(self, needed_class, date):
-        while True:
-            try:
-                self.find_needed_class(needed_class)
-                break
-            except NoSuchElementException as e:
-                print(e)
-            except ElementNotInteractableException as e:
-                print(e)
-        print('downloaoaded')
+        self.find_needed_class(needed_class)
+        print('downloaded find_needed_class')
         # time.sleep(1)
         self.find_needed_week(date)
         columns = self.session.find_elements_by_xpath(
@@ -42,9 +35,34 @@ class Parser:
         return self.get_time_and_subjects(columns, date)
 
     def find_needed_class(self, needed_class):
-        btn = self.session.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/div/div/div[4]/div/div[1]/span[1]')
-        btn.click()
-        class_list = self.session.find_elements_by_xpath('//*[@id="docbody"]/div[6]/div[3]/ul/li')
+        while True:
+            print('try find')
+            try:
+                btn = self.session.find_element_by_xpath(
+                    '/html/body/div[2]/div/div/div[1]/div/div/div[4]/div/div[1]/span[1]'
+                )
+                break
+            except NoSuchElementException as e:
+                print('Нету такого', e)
+        while True:
+            print('try click')
+            try:
+                btn.click()
+                break
+            except ElementNotInteractableException as e:
+                print('Не тыркается', e)
+
+        print('find_needed_class 1')
+        while True:
+            try:
+                class_list = self.session.find_elements_by_xpath('//*[@id="docbody"]/div[6]/div[3]/ul/li')
+                break
+            except NoSuchElementException as e:
+                print('class_list 1', e)
+            except ElementNotInteractableException as e:
+                print('class_list 2', e)
+        print('find_needed_class 2')
+
         sorted_class_list = sorted(class_list, key=lambda x: x.text)
         for elem in sorted_class_list:
             # print(elem.text, needed_class)
