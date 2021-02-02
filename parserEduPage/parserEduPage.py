@@ -66,13 +66,14 @@ class Parser:
                 print('class_list 2', e)
         print('find_needed_class 2')
 
-        sorted_class_list = sorted(class_list, key=lambda x: x.text)
-        for elem in sorted_class_list:
+        print([elem.text for elem in class_list])
+        for elem in class_list:
             # print(elem.text, needed_class)
             if elem.text == needed_class:
                 elem.click()
                 break
         else:
+            print('fuck')
             raise Exception('fuck')
 
     def find_needed_week(self, date):
