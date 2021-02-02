@@ -50,6 +50,9 @@ class Parser:
                 btn.click()
                 break
             except ElementNotInteractableException as e:
+                btn = self.session.find_element_by_xpath(
+                    '/html/body/div[2]/div/div/div[1]/div/div/div[4]/div/div[1]/span[1]'
+                )
                 print('Не тыркается', e)
 
         print('find_needed_class 1')
