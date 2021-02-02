@@ -59,11 +59,11 @@ class Parser:
         while True:
             try:
                 class_list = self.session.find_elements_by_xpath(
-                    '//*[@id="docbody"]/div[5]/div[3]/ul/li[1]'
+                    '//*[@id="docbody"]/div[5]/div[3]/ul/li'
                 )
                 if not class_list:
                     class_list = self.session.find_elements_by_xpath(
-                        '//*[@id="docbody"]/div[6]/div[3]/ul/li[1]'
+                        '//*[@id="docbody"]/div[6]/div[3]/ul/li'
                     )
                 break
             except NoSuchElementException as e:
