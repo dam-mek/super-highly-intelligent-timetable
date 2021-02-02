@@ -13,6 +13,7 @@ def log_this(function):
 
 
 def log(message):
+    print(message.text)
     with open('log.log', 'a') as file:
         file.write(create_log_str(message) + '\n')
 

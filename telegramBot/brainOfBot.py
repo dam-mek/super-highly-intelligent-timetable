@@ -2,6 +2,7 @@ import telebot
 from os import environ
 import datetime
 import pytz
+import calendar
 
 from telegramBot import markups, messages
 from logger import log_this, send_mail
@@ -167,7 +168,37 @@ def send_timetable(telegram_user_id, needed_class, needed_date):
                                             day=str(needed_date.day),
                                             month=str(needed_date.month),
                                             )
-    bot.send_message(chat_id=telegram_user_id, text=str(timetable), reply_markup=markups.menu)
+    weekend = {
+        0: 'Понедельник',
+        1: 'Вторник',
+        2: 'Среда',
+        3: 'Четверг',
+        4: 'Пятница',
+        5: 'Суббота',
+        6: 'Воскресенье',
+    }
+
+    day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
+
+    timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]}\n\n"
+    for subject in sorted(timetable, key=lambda info: datetime.datetime.strptime(info['startLesson'], '%H:%M')):
+        if 'startLesson' in subject:
+            timetable_text += f"""{subject['startLesson']}"""
+            if 'endLesson' in subject:
+                timetable_text += f"""-"""
+        if 'endLesson' in subject:
+            timetable_text += f"""{subject['endLesson']}"""
+        if 'endLesson' or 'startLesson' in subject:
+            timetable_text += f""": """
+        if 'subject' in subject:
+            timetable_text += f"""{subject['subject'].lower()} """
+        if 'teacherName' in subject:
+            timetable_text += f"""{subject['teacherName']} """
+        if 'teacherName' in subject:
+            timetable_text += f"""(каб. {subject['roomNumber']})"""
+        timetable_text += '\n'
+
+    bot.send_message(chat_id=telegram_user_id, text=timetable_text, reply_markup=markups.menu)
 
 
 @log_this

@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import datetime
 import calendar
 import time
@@ -10,7 +11,11 @@ class Parser:
     def __init__(self):
         url = 'https://gkl-kemerovo.edupage.org/timetable/'
         print('lego 1')
-        self.session = webdriver.Chrome()
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
+        self.session = webdriver.Chrome(options=chrome_options)
         print('lego 2')
         self.session.get(url)
         print('lego 3')
