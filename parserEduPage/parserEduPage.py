@@ -59,7 +59,8 @@ class Parser:
         while True:
             try:
                 class_list = self.session.find_elements_by_xpath('//*[@id="docbody"]/div[6]/div[3]/ul/li')
-                break
+                if class_list:
+                    break
             except NoSuchElementException as e:
                 print('class_list 1', e)
             except ElementNotInteractableException as e:
