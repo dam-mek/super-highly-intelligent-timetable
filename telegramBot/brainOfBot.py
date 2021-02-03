@@ -147,7 +147,8 @@ def ask_needed_class(message, user_classes):
     if len(user_classes) == 1:
         needed_class = user_classes[0]
     else:
-        needed_class = message.text
+        number_class, subclass = message.text.split('-')
+        needed_class = [number_class[-1:], number_class[:-1], subclass]
     print(needed_class)
     needed_class = School_class(number=needed_class[0], letter=needed_class[1], subclass=needed_class[2])
     print(needed_class)
