@@ -132,7 +132,7 @@ def ask_user_class(message):
     if len(user_classes) == 1:
         ask_needed_class(message, user_classes)
     else:
-        classes_markup = markups.get_user_classes_markup(*user_classes)
+        classes_markup = markups.get_user_classes_markup(user_classes)
         bot.register_next_step_handler(
             message=bot.send_message(chat_id=message.chat.id, text=messages.SENDING_TIMETABLE_ASK_USER_CLASS,
                                      reply_markup=classes_markup),
