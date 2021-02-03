@@ -38,10 +38,10 @@ settings.add('Параметры вывода',
              )
 
 
-def get_user_classes_markup(*classes):
+def get_user_classes_markup(classes):
     tmp_markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    print(*classes)
-    for number, letter, subclass in *classes:
+    print(classes)
+    for number, letter, subclass in classes:
         print(number, letter, subclass)
         tmp_markup.add(f'{number}{letter}-{subclass}'.lower())
     return tmp_markup
