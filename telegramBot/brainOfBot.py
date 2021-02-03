@@ -129,6 +129,7 @@ def dialogue(message):
 @log_this
 def ask_user_class(message):
     user_classes = mediator.get_user_classes(telegram_user_id=message.chat.id)
+    print(user_classes)
     if len(user_classes) == 1:
         ask_needed_class(message, user_classes)
     else:
