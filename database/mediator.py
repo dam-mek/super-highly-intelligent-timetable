@@ -31,7 +31,7 @@ def get_user_classes(telegram_user_id: str):
     database = DBAgent()
     tmp = database.get_parameters_output(telegram_user_id=telegram_user_id)
     database.close()
-    tmp = [('10', 'Д', 'ит')]
+    tmp = [('10', 'Д', 'ит'), ('10', 'Д', 'у')]
     return tmp
 
 
