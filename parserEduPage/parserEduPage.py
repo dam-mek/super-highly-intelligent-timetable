@@ -56,20 +56,17 @@ class Parser:
                 print('Не тыркается', e)
 
         print('find_needed_class 1')
-        while True:
-            try:
+        class_list = []
+        while not class_list:
+            class_list = self.session.find_elements_by_xpath(
+                '//*[@id="docbody"]/div[5]/div[3]/ul/li'
+            )
+            print(class_list)
+            if not class_list:
                 class_list = self.session.find_elements_by_xpath(
-                    '//*[@id="docbody"]/div[5]/div[3]/ul/li'
-                )
-                if not class_list:
-                    class_list = self.session.find_elements_by_xpath(
-                        '//*[@id="docbody"]/div[6]/div[3]/ul/li'
+                    '//*[@id="docbody"]/div[6]/div[3]/ul/li'
                     )
-                break
-            except NoSuchElementException as e:
-                print('class_list 1', e)
-            except ElementNotInteractableException as e:
-                print('class_list 2', e)
+                print(class_list)
         print('find_needed_class 2')
 
         print([elem.text for elem in class_list])
