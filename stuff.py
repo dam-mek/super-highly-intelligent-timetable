@@ -14,7 +14,7 @@ def get_subclasses(number: str, letter: str):
         return 'ИТ', 'У' if number == 10 else 'ФТ'
 
 
-class School_class:
+class Group:
 
     def __init__(self, number, letter, subclass):
         self.number = number
