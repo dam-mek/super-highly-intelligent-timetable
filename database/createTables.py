@@ -31,7 +31,7 @@ def create_tables():
         """
         CREATE TABLE student (
             id SERIAL PRIMARY KEY,
-            telegram_user_id VARCHAR(128),
+            messenger_user_id VARCHAR(128),
             name VARCHAR(64),
             surname VARCHAR(64)
         );""",
@@ -50,11 +50,11 @@ def create_tables():
         """
         CREATE TABLE output_parameters (
             student_id INTEGER REFERENCES student(id),
-            start_lesson boolean,
-            end_lesson boolean,
-            room_number boolean,
-            teacher_name boolean,
-            subject boolean
+            start_lesson BOOLEAN DEFAULT TRUE,
+            end_lesson BOOLEAN DEFAULT TRUE,
+            room_number BOOLEAN DEFAULT TRUE,
+            teacher_name BOOLEAN DEFAULT TRUE,
+            subject BOOLEAN DEFAULT TRUE
         );""",
     )
     conn = None

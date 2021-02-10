@@ -27,8 +27,9 @@ class Group:
 
 class Student:
 
-    def __init__(self, telegram_user_id, name, surname):
-        self.telegram_user_id = telegram_user_id
+    def __init__(self, messenger_user_id, name, surname, method):
+        self.method = method
+        self.messenger_user_id = self.method + '-' + messenger_user_id
         self.name = name
         self.surname = surname
 
