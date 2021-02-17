@@ -5,6 +5,7 @@ from vkBot import markups, messages
 from logger import log_this, send_mail
 from database import mediator
 from stuff import get_subclasses
+from parserEduPage.get_timetable import get_text_timetable
 
 token = environ.get('TOKEN_SHIT_VK')
 bot = VKontakteBot(token)
@@ -125,22 +126,32 @@ def command_send_timetable(event):
 
 def send_timetable(event):
     text = bot.get_text(event)
+    needed_class = '10д-ит'
     if text.lower() == 'сегодня':
+        needed_date = 'today'
+        text_timetable = get_text_timetable(needed_class=needed_class,
+                                            needed_date=needed_date
+                                            )
         bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text='today',
+            chat_id=bot.send_message(chat_id=event.chat_id, text=text_timetable,
                                      reply_markup=markups.choose_day_timetable),
             callback=send_timetable
         )
 
     if text.lower() == 'завтра':
+        needed_date = 'tomorrow'
+        text_timetable = get_text_timetable(needed_class=needed_class,
+                                            needed_date=needed_date
+                                            )
         bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text='tomorrow',
+            chat_id=bot.send_message(chat_id=event.chat_id, text=text_timetable,
                                      reply_markup=markups.choose_day_timetable),
             callback=send_timetable
         )
     if text.lower() == 'послезавтра':
+        needed_date = 'after_tomorrow'
         bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text='next tomorrow',
+            chat_id=bot.send_message(chat_id=event.chat_id, text=text_timetable,
                                      reply_markup=markups.choose_day_timetable),
             callback=send_timetable
         )
