@@ -19,20 +19,22 @@ server = Flask(__name__)
 #     return 'Ну типа Super Highly Intelligent Bot vk запущен', 200
 
 
-@server.route('/', methods=["POST"])
-def main():
-    data = json.loads(request.data)
-    print(data)
-    if data["type"] == "confirmation":
-        run_vk_bot()
-        return "confirmation code"
+# @server.route('/' + token, methods=["POST"])
+# def getMessage():
+#     data = json.loads(request.data)
+#     print(data)
+#     if data["type"] == "confirmation":
+#         run_vk_bot()
+#         return "confirmation code"
+#     return 'Ну типа Super Highly Intelligent Bot vk запущен', 200
 
 
-# @server.route("/")
-# def webhook():
-#     bot.remove_webhook()
-#     bot.set_webhook(url='https://super-highly-intelligent-tt.herokuapp.com/' + token)
-#     return 'Ну типа Super Highly Intelligent Bot запущен, а я нужен для вебхука', 200
+@server.route("/")
+def webhook():
+    # bot.remove_webhook()
+    # bot.set_webhook(url='https://super-highly-intelligent-tt.herokuapp.com/' + token)
+    run_vk_bot()
+    return 'Ну типа Super Highly Intelligent Bot запущен, а я нужен для вебхука', 200
 
 
 if __name__ == '__main__':
