@@ -72,7 +72,7 @@ class Parser:
         print([elem.text for elem in class_list])
         for elem in class_list:
             # print(elem.text, needed_class)
-            if elem.text == needed_class:
+            if elem.text == str(needed_class):
                 elem.click()
                 break
         else:

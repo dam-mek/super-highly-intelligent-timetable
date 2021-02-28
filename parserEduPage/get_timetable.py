@@ -49,7 +49,7 @@ def get_text_timetable(needed_class, needed_date):
 
     day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
 
-    timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]} {needed_class.upper()}\n\n"
+    timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]} {str(needed_class).upper()}\n\n"
     for subject in sorted(timetable, key=lambda info: datetime.datetime.strptime(info['startLesson'], '%H:%M')):
         if 'startLesson' in subject:
             timetable_text += f"""{subject['startLesson']}"""

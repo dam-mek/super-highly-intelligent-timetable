@@ -4,7 +4,7 @@ from vkBot.VKontakteBot import VKontakteBot
 from vkBot import markups, messages
 from logger import log_this, send_mail
 from database import mediator
-from stuff import get_subclasses
+from stuff import get_subclasses, Group
 from parserEduPage.get_timetable import get_text_timetable
 
 token = environ.get('TOKEN_SHIT_VK')
@@ -14,7 +14,7 @@ bot = VKontakteBot(token)
 def run_vk_bot():
     print('lego')
     for event in bot.longpoll.listen():
-        print(event.object)
+        # print(event.object)
         for key in event.object:
             print(key, event.object[key])
         bot.process_event(event)
@@ -117,47 +117,69 @@ def settings(event):
 
 @bot.message_handler(command='скинь расписание')
 def command_send_timetable(event):
+    ask_user_class(event)
+    # bot.register_next_step_handler(
+    #     chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
+    #                              reply_markup=markups.choose_day_timetable),
+    #     callback=send_timetable
+    # )
+
+
+def ask_user_class(event):
+    user_classes = mediator.get_user_classes(user_id=event.chat_id)
+    if len(user_classes) == 1:
+        ask_needed_class(event, user_classes)
+    else:
+        classes_markup = markups.get_user_classes_markup(user_classes)
+        bot.register_next_step_handler(
+            chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SENDING_TIMETABLE_ASK_USER_CLASS,
+                                     reply_markup=classes_markup),
+            callback=ask_needed_class,
+            user_classes=user_classes
+        )
+
+
+def ask_needed_class(event, user_classes):
+    if len(user_classes) == 1:
+        needed_class = user_classes[0]
+    else:
+        number_class, subclass = bot.get_text(event).split('-')
+        needed_class = [number_class[:-1], number_class[-1:], subclass]
+    needed_class = Group(number=needed_class[0], letter=needed_class[1], subclass=needed_class[2])
     bot.register_next_step_handler(
-        chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
+        chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SENDING_TIMETABLE_ASK_DATE,
                                  reply_markup=markups.choose_day_timetable),
-        callback=send_timetable
+        callback=send_timetable,
+        needed_class=needed_class,
     )
 
 
-def send_timetable(event):
-    text = bot.get_text(event)
-    needed_class = '10д-ит'
-    if text.lower() == 'сегодня':
-        needed_date = 'today'
-        text_timetable = get_text_timetable(needed_class=needed_class,
-                                            needed_date=needed_date
-                                            )
-        bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text=text_timetable,
-                                     reply_markup=markups.choose_day_timetable),
-            callback=send_timetable
-        )
-
-    if text.lower() == 'завтра':
-        needed_date = 'tomorrow'
-        text_timetable = get_text_timetable(needed_class=needed_class,
-                                            needed_date=needed_date
-                                            )
-        bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text=text_timetable,
-                                     reply_markup=markups.choose_day_timetable),
-            callback=send_timetable
-        )
-    if text.lower() == 'послезавтра':
-        needed_date = 'after_tomorrow'
-        bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text=text_timetable,
-                                     reply_markup=markups.choose_day_timetable),
-            callback=send_timetable
-        )
-    if text.lower() == 'в главное меню':
+def send_timetable(event, needed_class):
+    text = bot.get_text(event).lower()
+    if text == 'в главное меню':
         bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
+        return
+
+    if text == 'сегодня':
+        needed_date = 'today'
+    elif text == 'завтра':
+        needed_date = 'tomorrow'
+    elif text == 'послезавтра':
+        needed_date = 'after_tomorrow'
+    else:
+        needed_date = 'today'
+
+    text_timetable = get_text_timetable(needed_class=needed_class,
+                                        needed_date=needed_date
+                                        )
+    chat_id = bot.send_message(chat_id=event.chat_id, text=text_timetable,
+                               reply_markup=markups.menu)
+    # bot.register_next_step_handler(
+    #     chat_id=chat_id,
+    #     callback=send_timetable,
+    #     needed_date=needed_date,
+    # )
 
 # @bot.callback_query_handler(func=lambda call: True)
 # def callback_inline(call):

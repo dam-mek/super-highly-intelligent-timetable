@@ -20,6 +20,14 @@ def get_students():
     return tmp
 
 
+def get_user_classes(user_id: str):
+    database = DBAgent()
+    tmp = database.get_parameters_output(telegram_user_id=user_id)
+    database.close()
+    tmp = [('10', 'Д', 'ит'), ('10', 'Д', 'у')]
+    return tmp
+
+
 def get_parameters_output(telegram_user_id: str):
     database = DBAgent()
     tmp = database.get_parameters_output(telegram_user_id=telegram_user_id)

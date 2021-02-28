@@ -30,3 +30,7 @@ SETTINGS_INTRODUCING = """Выбирайте"""
 SETTINGS_PARAMETERS_OUTPUT = """Включайте или выключайте параметры, которые будут отображаться при выводе расписания:"""
 
 SENDING_TIMETABLE_INTRODUCING = """Выбирайте"""
+
+SENDING_TIMETABLE_ASK_USER_CLASS = """Выберите нужный класс"""
+
+SENDING_TIMETABLE_ASK_DATE = """Выберите нужную дату"""
