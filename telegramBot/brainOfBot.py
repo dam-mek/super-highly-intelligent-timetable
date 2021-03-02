@@ -122,6 +122,13 @@ def dialogue(message):
                                      reply_markup=markups.settings),
             callback=settings
         )
+    elif message.text.lower() == 'покажи время до конца пары':
+        bot.send_message(chat_id=message.chat.id, text='10 минут',
+                         reply_markup=markups.menu)
+    elif message.text.lower() == 'о боте':
+        bot.send_message(chat_id=message.chat.id, text="""Автор: *Денисов Артемий* _10Д_
+        Руководитель: *Кравчун Михаил Викторович*, _учитель физики и математики_""",
+                         reply_markup=markups.menu)
     else:
         print(message)
 
