@@ -4,14 +4,14 @@ from stuff import get_subclasses
 # source = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 # source.add(types.KeyboardButton('/feedback'))
 
-numbers_class = VkKeyboard(one_time=True)
+numbers_class = VkKeyboard(one_time=False)
 numbers_class.add_button('8', color=VkKeyboardColor.NEGATIVE)
 numbers_class.add_button('9', color=VkKeyboardColor.POSITIVE)
 numbers_class.add_line()
 numbers_class.add_button('10', color=VkKeyboardColor.NEGATIVE)
 numbers_class.add_button('11', color=VkKeyboardColor.POSITIVE)
 
-letters_class = VkKeyboard(one_time=True)
+letters_class = VkKeyboard(one_time=False)
 letters_class.add_button('А', color=VkKeyboardColor.NEGATIVE)
 letters_class.add_button('Б', color=VkKeyboardColor.POSITIVE)
 letters_class.add_line()
@@ -22,7 +22,7 @@ letters_class.add_button('Д', color=VkKeyboardColor.PRIMARY)
 
 
 def get_subclasses_markup(number: str, letter: str):
-    tmp_markup = VkKeyboard(one_time=True)
+    tmp_markup = VkKeyboard(one_time=False)
     subclasses = get_subclasses(number=number, letter=letter)
     tmp_markup.add_button(subclasses[0])
     tmp_markup.add_line()
@@ -30,7 +30,7 @@ def get_subclasses_markup(number: str, letter: str):
     return tmp_markup
 
 
-menu = VkKeyboard(one_time=True)
+menu = VkKeyboard(one_time=False)
 menu.add_button('Скинь расписание')
 menu.add_line()
 menu.add_button('Покажи время до конца пары')
@@ -39,7 +39,7 @@ menu.add_button('Настройки')
 menu.add_line()
 menu.add_button('О боте')
 
-settings = VkKeyboard(one_time=True)
+settings = VkKeyboard(one_time=False)
 settings.add_button('Параметры вывода')
 settings.add_line()
 settings.add_button('Изменить список классов')
@@ -48,7 +48,7 @@ settings.add_button('Настроить время отправки распис
 settings.add_line()
 settings.add_button('В главное меню')
 
-choose_day_timetable = VkKeyboard(one_time=True)
+choose_day_timetable = VkKeyboard(one_time=False)
 choose_day_timetable.add_button('Сегодня')
 choose_day_timetable.add_line()
 choose_day_timetable.add_button('Завтра')
@@ -59,7 +59,7 @@ choose_day_timetable.add_button('В главное меню')
 
 
 def get_user_classes_markup(classes):
-    tmp_markup = VkKeyboard(one_time=True)
+    tmp_markup = VkKeyboard(one_time=False)
     i = 0
     for i, (number, letter, subclass) in enumerate(classes):
         tmp_markup.add_button(f'{number}{letter}-{subclass}'.lower(), color=VkKeyboardColor.PRIMARY)
@@ -91,7 +91,7 @@ def get_parameters_output_inline_markup(start_lesson: bool = True,
     is_chosen_element = is_chosen if subject else is_not_chosen
     button_subject_text = f'{is_chosen_element} Название предмета {is_chosen_element}'
 
-    tmp_markup = VkKeyboard(one_time=True)
+    tmp_markup = VkKeyboard(one_time=False)
     tmp_markup.add_button(button_start_lesson_text)
     tmp_markup.add_line()
     tmp_markup.add_button(button_end_lesson_text)
