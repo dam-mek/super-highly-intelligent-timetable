@@ -7,7 +7,7 @@ import calendar
 from telegramBot import markups, messages
 from logger import log_this, send_mail
 from database import mediator
-from stuff import get_subclasses, School_class
+from stuff import get_subclasses, Group
 from parserEduPage import get_timetable
 
 timezone = pytz.timezone('Etc/GMT-7')
@@ -157,7 +157,7 @@ def ask_needed_class(message, user_classes):
         number_class, subclass = message.text.split('-')
         needed_class = [number_class[:-1], number_class[-1:], subclass]
     print(needed_class)
-    needed_class = School_class(number=needed_class[0], letter=needed_class[1], subclass=needed_class[2])
+    needed_class = Group(number=needed_class[0], letter=needed_class[1], subclass=needed_class[2])
     print(needed_class)
 
     bot.send_message(chat_id=message.chat.id, text=messages.SENDING_TIMETABLE_ASK_DATE,
