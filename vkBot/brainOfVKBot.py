@@ -14,11 +14,11 @@ bot = VKontakteBot(token)
 @bot.message_handler(command='Начать')
 def start_message(event):
     # send_mail(event)
-    bot.send_message(chat_id=event.chat_id, text=messages.START)
-    bot.send_message(chat_id=event.chat_id, text=messages.REGISTRATION)
-    bot.send_message(chat_id=event.chat_id, text=messages.REGISTRATION_ASK_SURNAME)
+    bot.send_message(chat_id=event['peer_id'], text=messages.START)
+    bot.send_message(chat_id=event['peer_id'], text=messages.REGISTRATION)
+    bot.send_message(chat_id=event['peer_id'], text=messages.REGISTRATION_ASK_SURNAME)
     bot.register_next_step_handler(
-        chat_id=event.chat_id,
+        chat_id=event['peer_id'],
         callback=registration_ask_surname,
         information_about_student=dict(),
     )
@@ -26,9 +26,9 @@ def start_message(event):
 
 def registration_ask_surname(event, information_about_student):
     information_about_student['surname'] = bot.get_text(event)
-    bot.send_message(chat_id=event.chat_id, text=messages.REGISTRATION_ASK_NAME)
+    bot.send_message(chat_id=event['peer_id'], text=messages.REGISTRATION_ASK_NAME)
     bot.register_next_step_handler(
-        chat_id=event.chat_id,
+        chat_id=event['peer_id'],
         callback=registration_ask_name,
         information_about_student=information_about_student,
     )
@@ -36,10 +36,10 @@ def registration_ask_surname(event, information_about_student):
 
 def registration_ask_name(event, information_about_student):
     information_about_student['name'] = bot.get_text(event)
-    bot.send_message(chat_id=event.chat_id, text=messages.REGISTRATION_ASK_NUMBER_CLASS,
+    bot.send_message(chat_id=event['peer_id'], text=messages.REGISTRATION_ASK_NUMBER_CLASS,
                      reply_markup=markups.numbers_class)
     bot.register_next_step_handler(
-        chat_id=event.chat_id,
+        chat_id=event['peer_id'],
         callback=registration_ask_number_class,
         information_about_student=information_about_student,
     )
@@ -47,10 +47,10 @@ def registration_ask_name(event, information_about_student):
 
 def registration_ask_number_class(event, information_about_student):
     information_about_student['number_class'] = bot.get_text(event)
-    bot.send_message(chat_id=event.chat_id, text=messages.REGISTRATION_ASK_LETTER_CLASS,
+    bot.send_message(chat_id=event['peer_id'], text=messages.REGISTRATION_ASK_LETTER_CLASS,
                      reply_markup=markups.letters_class)
     bot.register_next_step_handler(
-        chat_id=event.chat_id,
+        chat_id=event['peer_id'],
         callback=registration_ask_letter_class,
         information_about_student=information_about_student,
     )
@@ -58,13 +58,13 @@ def registration_ask_number_class(event, information_about_student):
 
 def registration_ask_letter_class(event, information_about_student):
     information_about_student['letter_class'] = bot.get_text(event)
-    bot.send_message(chat_id=event.chat_id, text=messages.REGISTRATION_ASK_SUBCLASS,
+    bot.send_message(chat_id=event['peer_id'], text=messages.REGISTRATION_ASK_SUBCLASS,
                      reply_markup=markups.get_subclasses_markup(
                          number=information_about_student['number_class'],
                          letter=information_about_student['letter_class'],
                      ))
     bot.register_next_step_handler(
-        chat_id=event.chat_id,
+        chat_id=event['peer_id'],
         callback=registration_ask_subclass,
         information_about_student=information_about_student,
     )
@@ -72,8 +72,8 @@ def registration_ask_letter_class(event, information_about_student):
 
 def registration_ask_subclass(event, information_about_student):
     information_about_student['subclass'] = bot.get_text(event)
-    mediator.add_student(telegram_user_id=event.chat_id, **information_about_student)
-    welcoming(chat_id=event.chat_id, information_about_student=information_about_student)
+    mediator.add_student(telegram_user_id=event['peer_id'], **information_about_student)
+    welcoming(chat_id=event['peer_id'], information_about_student=information_about_student)
 
 
 def welcoming(chat_id, information_about_student):
@@ -87,7 +87,7 @@ def welcoming(chat_id, information_about_student):
 @bot.message_handler(command='Настройки')
 def command_settings(event):
     bot.register_next_step_handler(
-        chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
+        chat_id=bot.send_message(chat_id=event['peer_id'], text=messages.SETTINGS_INTRODUCING,
                                  reply_markup=markups.settings),
         callback=settings
     )
@@ -96,13 +96,13 @@ def command_settings(event):
 def settings(event):
     text = bot.get_text(event)
     if text.lower() == 'параметры вывода':
-        bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_PARAMETERS_OUTPUT,
+        bot.send_message(chat_id=event['peer_id'], text=messages.SETTINGS_PARAMETERS_OUTPUT,
                          reply_markup=markups.get_parameters_output_inline_markup(
-                             **mediator.get_parameters_output(telegram_user_id=event.chat_id)
+                             **mediator.get_parameters_output(telegram_user_id=event['peer_id'])
                          ))
 
     if text.lower() == 'в главное меню':
-        bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
+        bot.send_message(chat_id=event['peer_id'], text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
 
 
@@ -110,20 +110,20 @@ def settings(event):
 def command_send_timetable(event):
     ask_user_class(event)
     # bot.register_next_step_handler(
-    #     chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
+    #     chat_id=bot.send_message(chat_id=event['peer_id'], text=messages.SETTINGS_INTRODUCING,
     #                              reply_markup=markups.choose_day_timetable),
     #     callback=send_timetable
     # )
 
 
 def ask_user_class(event):
-    user_classes = mediator.get_user_classes(user_id=event.chat_id)
+    user_classes = mediator.get_user_classes(user_id=event['peer_id'])
     if len(user_classes) == 1:
         ask_needed_class(event, user_classes)
     else:
         classes_markup = markups.get_user_classes_markup(user_classes)
         bot.register_next_step_handler(
-            chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SENDING_TIMETABLE_ASK_USER_CLASS,
+            chat_id=bot.send_message(chat_id=event['peer_id'], text=messages.SENDING_TIMETABLE_ASK_USER_CLASS,
                                      reply_markup=classes_markup),
             callback=ask_needed_class,
             user_classes=user_classes
@@ -138,7 +138,7 @@ def ask_needed_class(event, user_classes):
         needed_class = [number_class[:-1], number_class[-1:], subclass]
     needed_class = Group(number=needed_class[0], letter=needed_class[1], subclass=needed_class[2])
     bot.register_next_step_handler(
-        chat_id=bot.send_message(chat_id=event.chat_id, text=messages.SENDING_TIMETABLE_ASK_DATE,
+        chat_id=bot.send_message(chat_id=event['peer_id'], text=messages.SENDING_TIMETABLE_ASK_DATE,
                                  reply_markup=markups.choose_day_timetable),
         callback=send_timetable,
         needed_class=needed_class,
@@ -148,7 +148,7 @@ def ask_needed_class(event, user_classes):
 def send_timetable(event, needed_class):
     text = bot.get_text(event).lower()
     if text == 'в главное меню':
-        bot.send_message(chat_id=event.chat_id, text=messages.SETTINGS_INTRODUCING,
+        bot.send_message(chat_id=event['peer_id'], text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
         return
 
@@ -164,7 +164,7 @@ def send_timetable(event, needed_class):
     text_timetable = get_text_timetable(needed_class=needed_class,
                                         needed_date=needed_date
                                         )
-    chat_id = bot.send_message(chat_id=event.chat_id, text=text_timetable,
+    chat_id = bot.send_message(chat_id=event['peer_id'], text=text_timetable,
                                reply_markup=markups.menu)
     # bot.register_next_step_handler(
     #     chat_id=chat_id,
