@@ -13,12 +13,14 @@ class VKontakteBot:
         # self.longpoll = VkBotLongPoll(self.vk_session, 202506545)
 
     def process_event(self, event):
-        if event.type == VkBotEventType.MESSAGE_NEW:
+        print(event)
+        if event['type'] == VkBotEventType.MESSAGE_NEW:
             text = self.get_text(event).lower()
+            chat_id = event['chat_id']
             print(text)
-            if event.chat_id in self.next_step:
-                func, arguments = self.next_step[event.chat_id]
-                del self.next_step[event.chat_id]
+            if chat_id in self.next_step:
+                func, arguments = self.next_step[chat_id]
+                del self.next_step[chat_id]
                 func(event, **arguments)
                 return
             for handler in self.message_handlers:
@@ -63,7 +65,7 @@ class VKontakteBot:
 
     @staticmethod
     def get_text(event):
-        raw_text = event.object.message['text']
+        raw_text = event['object']['message']['text']
         if raw_text.startswith('[club202506545|'):
             if len(raw_text.split()) == 1:
                 text = 'помощь'

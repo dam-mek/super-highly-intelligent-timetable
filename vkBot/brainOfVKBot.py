@@ -11,15 +11,6 @@ token = environ.get('TOKEN_SHIT_VK')
 bot = VKontakteBot(token)
 
 
-def run_vk_bot():
-    print('lego')
-    for event in bot.longpoll.listen():
-        # print(event.object)
-        for key in event.object:
-            print(key, event.object[key])
-        bot.process_event(event)
-
-
 @bot.message_handler(command='Начать')
 def start_message(event):
     # send_mail(event)

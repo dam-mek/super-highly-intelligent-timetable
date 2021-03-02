@@ -37,9 +37,11 @@ def webhook():
     print(data)
     if 'type' not in data.keys():
         return 'fuck type'
+    if data['type'] == 'confirmation':
+        return '253d2422'
     else:
-        run_vk_bot()
-    return 'Ну типа Super Highly Intelligent Bot запущен, а я нужен для вебхука', 200
+        bot.process_event(data)
+    return 'ok', 200
 
 
 if __name__ == '__main__':
