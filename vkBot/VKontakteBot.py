@@ -13,10 +13,9 @@ class VKontakteBot:
         # self.longpoll = VkBotLongPoll(self.vk_session, 202506545)
 
     def process_event(self, event):
-        print(event)
         if event['type'] == VkBotEventType.MESSAGE_NEW:
             text = self.get_text(event).lower()
-            chat_id = event['chat_id']
+            chat_id = event['peer_id']
             print(text)
             if chat_id in self.next_step:
                 func, arguments = self.next_step[chat_id]
@@ -32,7 +31,7 @@ class VKontakteBot:
     def send_message(self, chat_id, text, reply_markup=None):
         print(chat_id, text)
         arguments = dict(
-            chat_id=chat_id,
+            peer_id=chat_id,
             message=text,
             random_id=get_random_id()
         )
