@@ -29,11 +29,16 @@ server = Flask(__name__)
 #     return 'Ну типа Super Highly Intelligent Bot vk запущен', 200
 
 
-@server.route("/")
+@server.route("/", methods=['POST'])
 def webhook():
     # bot.remove_webhook()
     # bot.set_webhook(url='https://super-highly-intelligent-tt.herokuapp.com/' + token)
-    run_vk_bot()
+    data = json.loads(request.data)
+    print(data)
+    if 'type' not in data.keys():
+        return 'fuck type'
+    else:
+        run_vk_bot()
     return 'Ну типа Super Highly Intelligent Bot запущен, а я нужен для вебхука', 200
 
 

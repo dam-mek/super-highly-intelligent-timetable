@@ -23,3 +23,15 @@ class Group:
 
     def __str__(self):
         return f'{self.number}{self.letter}-{self.subclass}'.lower()
+
+
+class Student:
+
+    def __init__(self, user_id, name, surname='', method=None):
+        self.method = method
+        self.user_id = self.method + '-' + user_id
+        self.name = name
+        self.surname = surname
+
+    def __str__(self):
+        return f'{self.name}'
