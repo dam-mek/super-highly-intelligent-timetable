@@ -10,7 +10,7 @@ class VKontakteBot:
         self.next_step = dict()
         self.vk_session = vk_api.VkApi(token=token)
         self.vk = self.vk_session.get_api()
-        self.longpoll = VkBotLongPoll(self.vk_session, 202506545)
+        # self.longpoll = VkBotLongPoll(self.vk_session, 202506545)
 
     def process_event(self, event):
         if event.type == VkBotEventType.MESSAGE_NEW:
