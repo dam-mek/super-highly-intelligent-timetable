@@ -13,9 +13,9 @@ class VKontakteBot:
         # self.longpoll = VkBotLongPoll(self.vk_session, 202506545)
 
     def process_event(self, event):
-        print(type(event))
-        print(event['type'], VkBotEventType.MESSAGE_NEW, event['type'] == VkBotEventType.MESSAGE_NEW)
-        if event['type'] == VkBotEventType.MESSAGE_NEW:
+        # print(type(event))
+        # print(event['type'], VkBotEventType.MESSAGE_NEW, event['type'] == VkBotEventType.MESSAGE_NEW)
+        if event['type'] == 'message_new':
             text = self.get_text(event).lower()
             chat_id = event['object']['message']['peer_id']
             print(text, chat_id)
@@ -28,7 +28,7 @@ class VKontakteBot:
                 if text == handler['command']:
                     handler['function'](event)
                     return
-            print('fuck', text, self.message_handlers)
+            print('fuck', text)  # self.message_handlers)
 
     def send_message(self, chat_id, text, reply_markup=None):
         print(chat_id, text)
