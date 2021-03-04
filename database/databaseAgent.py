@@ -30,7 +30,7 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
     )
     cursor.execute(
         f"""INSERT INTO output_parameters 
-        VALUES ({get_student_id(student, cursor=cursor)}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
+        VALUES ({get_student_id(student=student, cursor=cursor)}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
     )
     success = connect_student_and_class(student=student, group=group, cursor=cursor)
     return success
