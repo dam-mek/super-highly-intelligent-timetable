@@ -29,7 +29,8 @@ class Student:
 
     def __init__(self, user_id, name, surname='', method=None):
         self.method = method
-        self.user_id = self.method + '-' + user_id
+        if self.method is not None:
+            self.user_id = self.method + '-' + user_id
         self.name = name
         self.surname = surname
 
