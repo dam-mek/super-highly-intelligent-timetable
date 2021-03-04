@@ -10,13 +10,15 @@ def wrapper_database(func):
     #                              host='localhost',
     #                              port='5432')
     def inner(**kwargs):
-        conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
-        cursor = conn.cursor()
-        func(**kwargs, cursor=cursor)
-        conn.commit()
-        conn.close()
-        cursor.close()
-
+        if 'cursor' not in kwargs:
+            conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
+            cursor = conn.cursor()
+            func(**kwargs, cursor=cursor)
+            conn.commit()
+            conn.close()
+            cursor.close()
+        else:
+            func(**kwargs)
     return inner
 
 
@@ -28,9 +30,9 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
     )
     cursor.execute(
         f"""INSERT INTO output_parameters 
-        VALUES ({get_student_id(student=student)}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
+        VALUES ({get_student_id(student, cursor=cursor)}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
     )
-    success = connect_student_and_class(student=student, group=group)
+    success = connect_student_and_class(student=student, group=group, cursor=cursor)
     return success
 
 
@@ -38,9 +40,9 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
 def overwrite_student(new_student: Student, new_group: Group, cursor=None):
     cursor.execute(
         f"""DELETE FROM student 
-            WHERE student_id = {get_student_id(student=new_student)};"""
+            WHERE student_id = {get_student_id(student=new_student, cursor=cursor)};"""
     )
-    success = add_student(student=new_student, group=new_group)
+    success = add_student(student=new_student, group=new_group, cursor=cursor)
     return success
 
 
@@ -48,7 +50,7 @@ def overwrite_student(new_student: Student, new_group: Group, cursor=None):
 def connect_student_and_class(student_id: int, group: Group, cursor=None) -> bool:
     cursor.execute(
         f"""INSERT INTO student_school_group (student_id, school_group_id) 
-            VALUES ('{student_id}', '{get_group_id(group=group)}');"""
+            VALUES ('{student_id}', '{get_group_id(group=group, cursor=cursor)}');"""
     )
     return True
 
@@ -159,7 +161,7 @@ def get_student_groups(student_id: int, cursor=None):
     ;""")
     list_groups = []
     for group_id in cursor.fetchall():
-        list_groups.append(get_group(group_id=group_id))
+        list_groups.append(get_group(group_id=group_id, cursor=cursor))
     return list_groups
 
 
