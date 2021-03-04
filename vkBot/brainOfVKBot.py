@@ -194,7 +194,7 @@ def ask_user_class(event):
                          reply_markup=markups.menu)
         bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
-
+        return
     if len(user_classes) == 1:
         ask_needed_class(event, user_classes)
     else:
