@@ -85,6 +85,15 @@ def registration_ask_subclass(event, information_about_student):
                   letter=information_about_student['letter_group'],
                   subclass=information_about_student['subclass'])
     databaseAgent.add_student(student=student, group=group)
+    add_another_subclass = True
+    if add_another_subclass:
+        subclasses = get_subclasses(number=information_about_student['number_group'],
+                                    letter=information_about_student['letter_group'])
+        another_subclass = subclasses[0] if information_about_student['subclass'] == subclasses[1] else subclasses[1]
+        group = Group(number=information_about_student['number_group'],
+                      letter=information_about_student['letter_group'],
+                      subclass=another_subclass)
+        databaseAgent.connect_student_and_class(student_id=chat_id, group=group)
     welcoming(chat_id=chat_id, information_about_student=information_about_student)
 
 
@@ -139,7 +148,7 @@ def change_output_parameter(event, output_parameters):
         bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
         return
-    text = text[2:-2]
+    # text = text[2:-2]
     if text == 'начало урока':
         output_parameters['start_lesson'] = not output_parameters['start_lesson']
         message_text = f'Вывод начала урока ' + 'включен' if output_parameters['start_lesson'] else 'отключен'
@@ -180,6 +189,12 @@ def command_send_timetable(event):
 def ask_user_class(event):
     chat_id = bot.get_chat_id(event)
     user_classes = databaseAgent.get_student_groups(student_id=chat_id)
+    if user_classes is None:
+        bot.send_message(chat_id=chat_id, text=messages.STUDENT_DOESNT_HAVE_GROUPS,
+                         reply_markup=markups.menu)
+        bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
+                         reply_markup=markups.menu)
+
     if len(user_classes) == 1:
         ask_needed_class(event, user_classes)
     else:

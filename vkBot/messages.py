@@ -42,4 +42,6 @@ SENDING_TIMETABLE_ASK_USER_CLASS = """Выберите нужный класс""
 
 SENDING_TIMETABLE_ASK_DATE = """Выберите нужную дату"""
 
+STUDENT_DOESNT_HAVE_GROUPS = """Вы не выбрали никакой класс, выберите его в настройках"""
+
 PROBLEM_REQUEST = """Капец, я не понял, чо вам надо, попробуйте ещё раз или пишите даммеку"""
