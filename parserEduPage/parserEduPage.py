@@ -146,26 +146,26 @@ class Parser:
     @staticmethod
     def get_subject(time_of_subject, information_of_lesson):
         if len(information_of_lesson) == 1:
-            subject = dict(
-                startLesson=time_of_subject.split('-')[0],
-                endLesson=time_of_subject.split('-')[1],
-                subject=information_of_lesson[0],
-            )
+            subject = {
+                'start_lesson': time_of_subject.split('-')[0],
+                'end_lesson': time_of_subject.split('-')[1],
+                'subject': information_of_lesson[2],
+            }
         elif len(information_of_lesson) == 2:
-            subject = dict(
-                startLesson=time_of_subject.split('-')[0],
-                endLesson=time_of_subject.split('-')[1],
-                teacherName=information_of_lesson[0],
-                subject=information_of_lesson[1],
-            )
+            subject = {
+                'start_lesson': time_of_subject.split('-')[0],
+                'end_lesson': time_of_subject.split('-')[1],
+                'teacher_name': information_of_lesson[1],
+                'subject': information_of_lesson[2],
+            }
         else:
-            subject = dict(
-                startLesson=time_of_subject.split('-')[0],
-                endLesson=time_of_subject.split('-')[1],
-                roomNumber=information_of_lesson[0].split('\n')[-1],
-                teacherName=information_of_lesson[1],
-                subject=information_of_lesson[2],
-            )
+            subject = {
+                'start_lesson': time_of_subject.split('-')[0],
+                'end_lesson': time_of_subject.split('-')[1],
+                'room_number': information_of_lesson[0].split('\n')[-1],
+                'teacher_name': information_of_lesson[1],
+                'subject': information_of_lesson[2],
+            }
         return subject
 
     @staticmethod

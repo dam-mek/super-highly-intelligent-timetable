@@ -27,10 +27,19 @@ WELCOME = """Добро пожаловать, {name}.
 
 SETTINGS_INTRODUCING = """Выбирайте"""
 
-SETTINGS_PARAMETERS_OUTPUT = """Включайте или выключайте параметры, которые будут отображаться при выводе расписания:"""
+SETTINGS_PARAMETERS_OUTPUT = """Ваша нынешняя настройка:
+Начало урока — {start_lesson}
+Конец урока — {end_lesson}
+Номер кабинета — {room_number}
+Имя учителя — {teacher name}
+Название предмета — {subject}
+
+Включайте или отключайте параметры, которые будут отображаться при выводе расписания:"""
 
 SENDING_TIMETABLE_INTRODUCING = """Выбирайте"""
 
 SENDING_TIMETABLE_ASK_USER_CLASS = """Выберите нужный класс"""
 
 SENDING_TIMETABLE_ASK_DATE = """Выберите нужную дату"""
+
+PROBLEM_REQUEST = """Капец, я не понял, чо вам надо, попробуйте ещё раз или пишите даммеку"""

@@ -24,19 +24,13 @@ def get_timetable(needed_class: str, day: str, month: str):
     return timetable
 
 
-def get_text_timetable(needed_class, needed_date):
+def get_text_timetable(needed_class, needed_date, output_parameters):
     changing_date = {
         'yesterday': -1,
         'today': 0,
         'tomorrow': 1,
         'after_tomorrow': 2,
     }
-    print(needed_class)
-    needed_date = datetime.datetime.now(timezone).date() + datetime.timedelta(days=changing_date[needed_date])
-    timetable = get_timetable(needed_class=needed_class,
-                              day=str(needed_date.day),
-                              month=str(needed_date.month),
-                              )
     weekend = {
         0: 'Понедельник',
         1: 'Вторник',
@@ -47,24 +41,36 @@ def get_text_timetable(needed_class, needed_date):
         6: 'Воскресенье',
     }
 
+    print(needed_class)
+    needed_date = datetime.datetime.now(timezone).date() + datetime.timedelta(days=changing_date[needed_date])
+    timetable = get_timetable(needed_class=needed_class,
+                              day=str(needed_date.day),
+                              month=str(needed_date.month))
+
+    # очищием расписание от ненужных параметров
+    for i in range(len(timetable)):
+        for key in timetable[i]:
+            if key not in output_parameters:
+                del timetable[i][key]
+
     day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
 
     timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]} {str(needed_class).upper()}\n\n"
-    for subject in sorted(timetable, key=lambda info: datetime.datetime.strptime(info['startLesson'], '%H:%M')):
-        if 'startLesson' in subject:
-            timetable_text += f"""{subject['startLesson']}"""
-            if 'endLesson' in subject:
+    for subject in sorted(timetable, key=lambda info: datetime.datetime.strptime(info['start_lesson'], '%H:%M')):
+        if 'start_lesson' in subject:
+            timetable_text += f"""{subject['start_lesson']}"""
+            if 'end_lesson' in subject:
                 timetable_text += f"""-"""
-        if 'endLesson' in subject:
-            timetable_text += f"""{subject['endLesson']}"""
-        if 'endLesson' or 'startLesson' in subject:
+        if 'end_lesson' in subject:
+            timetable_text += f"""{subject['end_lesson']}"""
+        if 'end_lesson' or 'start_lesson' in subject:
             timetable_text += f""": """
         if 'subject' in subject:
             timetable_text += f"""{subject['subject'].lower()} """
-        if 'teacherName' in subject:
-            timetable_text += f"""{subject['teacherName']} """
-        if 'teacherName' in subject:
-            timetable_text += f"""(каб. {subject['roomNumber']})"""
+        if 'teacher_name' in subject:
+            timetable_text += f"""{subject['teacher_name']} """
+        if 'room_number' in subject:
+            timetable_text += f"""(каб. {subject['room_number']})"""
         timetable_text += '\n'
 
     return timetable_text

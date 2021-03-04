@@ -25,10 +25,15 @@ class VKontakteBot:
                 func(event, **arguments)
                 return
             for handler in self.message_handlers:
-                if text == handler['command']:
+                if handler['command'] == text:
                     handler['function'](event)
                     return
+
+            # Если запрос пользователя не был понят
             print('fuck', text)  # self.message_handlers)
+            for handler in self.message_handlers:
+                if handler['command'] == '':
+                    handler['function'](event)
 
     def send_message(self, chat_id, text, reply_markup=None):
         print(chat_id, text)
@@ -75,3 +80,7 @@ class VKontakteBot:
         else:
             text = raw_text
         return text
+
+    @staticmethod
+    def get_chat_id(event):
+        return event['object']['message']['peer_id']
