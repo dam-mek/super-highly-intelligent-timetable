@@ -9,7 +9,6 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotInterac
 class Parser:
 
     def __init__(self):
-        url = 'https://gkl-kemerovo.edupage.org/timetable/'
         print('lego 1')
         chrome_options = Options()
         chrome_options.add_argument('--headless')
@@ -17,11 +16,12 @@ class Parser:
         chrome_options.add_argument('--no-sandbox')
         self.session = webdriver.Chrome(options=chrome_options)
         print('lego 2')
+        url = 'https://gkl-kemerovo.edupage.org/timetable/'
         self.session.get(url)
         print('lego 3')
 
     def close(self):
-        self.session.close()
+        self.session.quit()
 
     def get_timetable(self, needed_class, date):
         self.find_needed_class(needed_class)
