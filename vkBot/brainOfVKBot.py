@@ -149,21 +149,24 @@ def change_output_parameter(event, output_parameters):
                          reply_markup=markups.menu)
         return
     # text = text[2:-2]
+    
+    is_chosen = 'включён 🟢'
+    is_not_chosen = 'отключён 🔴'
     if text == 'начало урока':
         output_parameters['start_lesson'] = not output_parameters['start_lesson']
-        message_text = f'Вывод начала урока ' + ( 'включен' if output_parameters['start_lesson'] else 'отключен' )
+        message_text = f'Вывод начала урока ' + ( is_chosen if output_parameters['start_lesson'] else is_not_chosen )
     elif text == 'конец урока':
         output_parameters['end_lesson'] = not output_parameters['end_lesson']
-        message_text = f'Вывод конца урока ' + ( 'включен' if output_parameters['end_lesson'] else 'отключен' )
+        message_text = f'Вывод конца урока ' + ( is_chosen if output_parameters['end_lesson'] else is_not_chosen )
     elif text == 'номер кабинета':
         output_parameters['room_number'] = not output_parameters['room_number']
-        message_text = f'Вывод номера кабинета ' + ( 'включен' if output_parameters['room_number'] else 'отключен' )
+        message_text = f'Вывод номера кабинета ' + ( is_chosen if output_parameters['room_number'] else is_not_chosen )
     elif text == 'имя учителя':
         output_parameters['teacher_name'] = not output_parameters['teacher_name']
-        message_text = f'Вывод имя учителя ' + ( 'включен' if output_parameters['teacher_name'] else 'отключен' )
+        message_text = f'Вывод имя учителя ' + ( is_chosen if output_parameters['teacher_name'] else is_not_chosen )
     elif text == 'название предмета':
         output_parameters['subject'] = not output_parameters['subject']
-        message_text = f'Вывод названия предмета ' + ( 'включен' if output_parameters['subject'] else 'отключен' )
+        message_text = f'Вывод названия предмета ' + ( is_chosen if output_parameters['subject'] else is_not_chosen )
     else:
         problem_request(event)
         return
