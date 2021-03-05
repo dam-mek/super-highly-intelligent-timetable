@@ -23,7 +23,7 @@ REGISTRATION_ASK_LETTER_CLASS = """Выберите букву своего кл
 REGISTRATION_ASK_SUBCLASS = """Выберите подгруппу своего класса"""
 
 WELCOME = """Добро пожаловать, {name}.
-В список классов, которые вы отслеживаете, уже добавлен {number_group}{letter_group}-{subclass}. При желании, в настройках вы можете добавить {number_class}{letter_class}-{another_subclass} и любой другой класс."""
+В список классов, которые вы отслеживаете, уже добавлен {number_group}{letter_group}-{subclass}. При желании, в настройках вы можете добавить {number_group}{letter_group}-{another_subclass} и любой другой класс."""
 
 SETTINGS_INTRODUCING = """Выбирайте"""
 
