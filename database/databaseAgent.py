@@ -175,7 +175,7 @@ def get_student_groups(student_id: int, cursor=None):
     ;""")
     list_groups = []
     for group_id in cursor.fetchall():
-        list_groups.append(get_group(group_id=group_id, cursor=cursor))
+        list_groups.append(get_group(group_id=group_id[0], cursor=cursor))
     return list_groups
 
 
