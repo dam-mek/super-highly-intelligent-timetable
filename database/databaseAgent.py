@@ -51,15 +51,20 @@ def overwrite_student(new_student: Student, new_group: Group, cursor=None):
 
 @wrapper_database
 def connect_student_and_class(student_id: int, group: Group, cursor=None) -> bool:
+    student = Student(user_id=student_id, name='lorem', surname='ipsum')
+    student_id = get_student_id(student=student, cursor=cursor)
+    group_id = get_group_id(group=group, cursor=cursor)
     cursor.execute(
         f"""INSERT INTO student_school_group (student_id, school_group_id) 
-            VALUES ('{student_id}', '{get_group_id(group=group, cursor=cursor)}');"""
+            VALUES ('{student_id}', '{group_id}');"""
     )
     return True
 
 
 @wrapper_database
 def change_output_parameters(student_id: int, new_parameters, cursor=None):
+    student = Student(user_id=student_id, name='lorem', surname='ipsum')
+    student_id = get_student_id(student=student, cursor=cursor)
     cursor.execute(
         f"""UPDATE output_parameters 
             SET (start_lesson, end_lesson, room_number, teacher_name, subject) = 
@@ -72,6 +77,8 @@ def change_output_parameters(student_id: int, new_parameters, cursor=None):
 
 @wrapper_database
 def get_output_parameters(student_id: int, cursor=None):
+    student = Student(user_id=student_id, name='lorem', surname='ipsum')
+    student_id = get_student_id(student=student, cursor=cursor)
     cursor.execute(
         f"""SELECT start_lesson, end_lesson, room_number, teacher_name, subject
             FROM output_parameters 
@@ -136,6 +143,8 @@ def get_student_id(student: Student, cursor=None) -> int:
 
 @wrapper_database
 def get_student(student_id: int, cursor=None) -> Student:
+    student = Student(user_id=student_id, name='lorem', surname='ipsum')
+    student_id = get_student_id(student=student, cursor=cursor)
     cursor.execute(
         f"""
         SELECT user_id, name, surname
@@ -156,6 +165,8 @@ def get_student_groups(student_id: int, cursor=None):
     :param cursor:
     :return:
     """
+    student = Student(user_id=student_id, name='lorem', surname='ipsum')
+    student_id = get_student_id(student=student, cursor=cursor)
     cursor.execute(
         f"""
         SELECT school_group_id
