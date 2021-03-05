@@ -35,7 +35,7 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
         f"""INSERT INTO output_parameters 
         VALUES ({student_id}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
     )
-    success = connect_student_and_class(student_id=student_id, group=group, cursor=cursor)
+    success = connect_student_and_class(student_id=student.user_id, group=group, cursor=cursor)
     return success
 
 
@@ -51,6 +51,8 @@ def overwrite_student(new_student: Student, new_group: Group, cursor=None):
 
 @wrapper_database
 def connect_student_and_class(student_id: int, group: Group, cursor=None) -> bool:
+    student = Student(user_id=student_id, name='lorem', surname='ipsum')
+    student_id = get_student_id(student=student, cursor=cursor)
     group_id = get_group_id(group=group, cursor=cursor)
     cursor.execute(
         f"""INSERT INTO student_school_group (student_id, school_group_id) 
