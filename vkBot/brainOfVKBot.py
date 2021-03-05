@@ -186,6 +186,17 @@ def command_send_timetable(event):
     # )
 
 
+@bot.message_handler(command='скинь группы')
+def command_send_groups(event):
+    bot.send_message(chat_id=bot.get_chat_id(event), text=str(databaseAgent.get_groups()),
+                     reply_markup=markups.menu)
+    # bot.register_next_step_handler(
+    #     chat_id=bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
+    #                              reply_markup=markups.choose_day_timetable),
+    #     callback=send_timetable
+    # )
+
+
 def ask_user_class(event):
     chat_id = bot.get_chat_id(event)
     user_classes = databaseAgent.get_student_groups(student_id=chat_id)
