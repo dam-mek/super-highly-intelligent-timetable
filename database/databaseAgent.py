@@ -10,7 +10,8 @@ def wrapper_database(func):
     #                              host='localhost',
     #                              port='5432')
     def inner(**kwargs):
-        if 'cursor' not in kwargs:
+        print(func.__name__, kwargs)
+        if 'cursor' not in kwargs or kwargs['cursor'] is None:
             conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
             cursor = conn.cursor()
             func(**kwargs, cursor=cursor)
