@@ -30,11 +30,12 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
         f"""INSERT INTO student (user_id, name, surname) 
             VALUES ('{student.user_id}', '{student.name}', '{student.surname}');"""
     )
+    student_id = get_student_id(student=student, cursor=cursor)
     cursor.execute(
         f"""INSERT INTO output_parameters 
-        VALUES ({get_student_id(student=student, cursor=cursor)}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
+        VALUES ({student_id}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
     )
-    success = connect_student_and_class(student=student, group=group, cursor=cursor)
+    success = connect_student_and_class(student_id=student_id, group=group, cursor=cursor)
     return success
 
 
