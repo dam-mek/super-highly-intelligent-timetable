@@ -14,15 +14,13 @@ def wrapper_database(func):
         if 'cursor' not in kwargs or kwargs['cursor'] is None:
             conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
             cursor = conn.cursor()
-            cursor.execute("""SELECT table_name FROM information_schema.tables
-                              WHERE table_schema = 'public'""")
-            print(cursor.fetchall())
-            func(**kwargs, cursor=cursor)
+            returned = func(**kwargs, cursor=cursor)
             conn.commit()
             conn.close()
             cursor.close()
         else:
-            func(**kwargs)
+            returned = func(**kwargs)
+        return returned
     return inner
 
 
