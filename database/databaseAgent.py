@@ -102,7 +102,7 @@ def get_group_id(group: Group, cursor=None) -> str:
             FROM school_group 
             WHERE number = '{group.number}' AND letter = '{group.letter}' AND subclass = '{group.subclass}';"""
     )
-    return cursor.fetchone()
+    return cursor.fetchone()[0]
 
 
 @wrapper_database
