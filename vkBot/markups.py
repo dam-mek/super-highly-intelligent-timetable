@@ -61,8 +61,8 @@ choose_day_timetable.add_button('В главное меню')
 def get_user_classes_markup(classes):
     tmp_markup = VkKeyboard(one_time=False)
     i = 0
-    for i, (number, letter, subclass) in enumerate(classes):
-        tmp_markup.add_button(f'{number}{letter}-{subclass}'.lower(), color=VkKeyboardColor.PRIMARY)
+    for i, group in enumerate(classes):
+        tmp_markup.add_button(f'{group.number}{group.letter}-{group.subclass}'.lower(), color=VkKeyboardColor.PRIMARY)
         if i != len(classes) - 1:
             tmp_markup.add_line()
     return tmp_markup
