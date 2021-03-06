@@ -98,7 +98,7 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
         if 'end_lesson' in subject or 'start_lesson' in subject:
             timetable_text += f""": """
         if 'subject' in subject:
-            timetable_text += f"""{subject['subject'].lower()} """
+            timetable_text += f"""{subject['subject']} """
         if 'teacher_name' in subject:
             timetable_text += f"""{subject['teacher_name']} """
         if 'room_number' in subject:
