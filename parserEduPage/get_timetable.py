@@ -90,19 +90,19 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
     timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]} {str(needed_class).upper()}\n\n"
     for subject in timetable:
         if 'start_lesson' in subject:
-            timetable_text += f"""{subject['start_lesson']}"""
+            timetable_text += f"{subject['start_lesson']}"
             if 'end_lesson' in subject:
-                timetable_text += f"""-"""
+                timetable_text += f"-"
         if 'end_lesson' in subject:
-            timetable_text += f"""{subject['end_lesson']}"""
+            timetable_text += f"{subject['end_lesson']}"
         if 'end_lesson' in subject or 'start_lesson' in subject:
-            timetable_text += f""": """
+            timetable_text += f": "
         if 'subject' in subject:
-            timetable_text += f"""{subject['subject']} """
+            timetable_text += f"{subject['subject']} "
         if 'teacher_name' in subject:
-            timetable_text += f"""{subject['teacher_name']} """
+            timetable_text += f"{subject['teacher_name']} "
         if 'room_number' in subject:
-            timetable_text += f"""(каб. {subject['room_number']})"""
+            timetable_text += f"(каб. {subject['room_number']})"
         timetable_text += '\n'
 
     return timetable_text
