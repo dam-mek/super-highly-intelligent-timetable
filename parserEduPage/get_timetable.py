@@ -40,6 +40,31 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
         5: 'Суббота',
         6: 'Воскресенье',
     }
+    subjects = {
+        'инф-ка': 'Информатика',
+        'мат': 'Математика',
+        'р.лит.': 'Родная литература',
+        'лит-ра': 'Литература',
+        'англ': 'Английский',
+        'рос.в мире': 'Россия в мире',
+        'физ-ра': 'Физическая культура',
+        'фр2': 'Французский',
+        'рус яз': 'Русский язык',
+        'естест.': 'Естествознание',
+        'общ': 'Обществознание',
+        'геогр': 'География',
+        'техн.': 'Технология',
+        'техн': 'Технология',
+        'био': 'Биология',
+        'физ': 'Физика',
+        'хим': 'Химия',
+        'астро': 'Астрономия',
+        'хпс': 'Химия природных соединений',
+        'нем': 'Немецкий',
+        'всеоб.ист': 'Всеобщая история',
+        'изо': 'Изобразительное искусство',
+        'истор': 'История',
+    }
 
     print(needed_class)
     needed_date = datetime.datetime.now(timezone).date() + datetime.timedelta(days=changing_date[needed_date])
@@ -48,12 +73,17 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
                                   month=str(needed_date.month))
     raw_timetable.sort(key=lambda info: datetime.datetime.strptime(info['start_lesson'], '%H:%M'))
 
-    timetable = [dict() for _ in range(len(raw_timetable))]
     # очищием расписание от ненужных параметров
+    timetable = [dict() for _ in range(len(raw_timetable))]
     for i in range(len(raw_timetable)):
         for key in raw_timetable[i]:
             if output_parameters[key]:
                 timetable[i][key] = raw_timetable[i][key]
+
+    # меняем названия предметов на полные
+    if output_parameters['subject']:
+        for i in range(len(raw_timetable)):
+            timetable[i]['subject'] = subjects[timetable[i]['subject'].lower()]
 
     day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
 
@@ -65,7 +95,7 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
                 timetable_text += f"""-"""
         if 'end_lesson' in subject:
             timetable_text += f"""{subject['end_lesson']}"""
-        if 'end_lesson' or 'start_lesson' in subject:
+        if 'end_lesson' in subject or 'start_lesson' in subject:
             timetable_text += f""": """
         if 'subject' in subject:
             timetable_text += f"""{subject['subject'].lower()} """
