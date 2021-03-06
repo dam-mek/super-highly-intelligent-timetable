@@ -44,10 +44,10 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
     print(needed_class)
     needed_date = datetime.datetime.now(timezone).date() + datetime.timedelta(days=changing_date[needed_date])
     raw_timetable = get_timetable(needed_class=needed_class,
-                              day=str(needed_date.day),
-                              month=str(needed_date.month))
+                                  day=str(needed_date.day),
+                                  month=str(needed_date.month))
 
-    timetable = [dict()]*len(raw_timetable)
+    timetable = [dict()] * len(raw_timetable)
     # очищием расписание от ненужных параметров
     for i in range(len(raw_timetable)):
         for key in raw_timetable[i]:
