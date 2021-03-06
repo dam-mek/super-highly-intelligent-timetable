@@ -43,15 +43,16 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
 
     print(needed_class)
     needed_date = datetime.datetime.now(timezone).date() + datetime.timedelta(days=changing_date[needed_date])
-    timetable = get_timetable(needed_class=needed_class,
+    raw_timetable = get_timetable(needed_class=needed_class,
                               day=str(needed_date.day),
                               month=str(needed_date.month))
 
+    timetable = [dict()]*len(raw_timetable)
     # очищием расписание от ненужных параметров
-    for i in range(len(timetable)):
-        for key in timetable[i]:
+    for i in range(len(raw_timetable)):
+        for key in raw_timetable[i]:
             if output_parameters[key]:
-                del timetable[i][key]
+                timetable[i][key] = raw_timetable[i][key]
 
     day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
 
