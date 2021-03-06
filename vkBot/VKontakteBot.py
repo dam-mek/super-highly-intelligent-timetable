@@ -17,7 +17,9 @@ class VKontakteBot:
         # print(event['type'], VkBotEventType.MESSAGE_NEW, event['type'] == VkBotEventType.MESSAGE_NEW)
         if event['type'] == 'message_new':
             text = self.get_text(event).lower()
-            chat_id = event['object']['message']['peer_id']
+            if text.startswith('@all '):
+                return
+            chat_id = self.get_chat_id(event)
             print(text, chat_id)
             if chat_id in self.next_step:
                 func, arguments = self.next_step[chat_id]
