@@ -30,12 +30,12 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
         f"""INSERT INTO student (user_id, name, surname)
             VALUES ('{student.user_id}', '{student.name}', '{student.surname}');"""
     )
-    student_id = get_student_id(student=student, cursor=cursor)
+    student_id = get_student_id_in_database(student=student, cursor=cursor)
     cursor.execute(
         f"""INSERT INTO output_parameters 
         VALUES ({student_id}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);"""
     )
-    success = connect_student_and_class(student_id=student.user_id, group=group, cursor=cursor)
+    success = connect_student_and_class(user_id=student.user_id, group=group, cursor=cursor)
     return success
 
 
@@ -43,46 +43,46 @@ def add_student(student: Student, group: Group, cursor=None) -> bool:
 def overwrite_student(new_student: Student, new_group: Group, cursor=None):
     cursor.execute(
         f"""DELETE FROM student 
-            WHERE student_id = {get_student_id(student=new_student, cursor=cursor)};"""
+            WHERE student_id = {get_student_id_in_database(student=new_student, cursor=cursor)};"""
     )
     success = add_student(student=new_student, group=new_group, cursor=cursor)
     return success
 
 
 @wrapper_database
-def connect_student_and_class(student_id: int, group: Group, cursor=None) -> bool:
-    student = Student(user_id=student_id, name='lorem', surname='ipsum')
-    student_id = get_student_id(student=student, cursor=cursor)
-    group_id = get_group_id(group=group, cursor=cursor)
+def connect_student_and_class(user_id: int, group: Group, cursor=None) -> bool:
+    student = Student(user_id=user_id)
+    student_id_in_database = get_student_id_in_database(student=student, cursor=cursor)
+    group_id_in_database = get_group_id_in_database(group=group, cursor=cursor)
     cursor.execute(
         f"""INSERT INTO student_school_group (student_id, school_group_id) 
-            VALUES ('{student_id}', '{group_id}');"""
+            VALUES ('{student_id_in_database}', '{group_id_in_database}');"""
     )
     return True
 
 
 @wrapper_database
-def change_output_parameters(student_id: int, new_parameters, cursor=None):
-    student = Student(user_id=student_id, name='lorem', surname='ipsum')
-    student_id = get_student_id(student=student, cursor=cursor)
+def change_output_parameters(user_id: int, new_parameters, cursor=None):
+    student = Student(user_id=user_id)
+    student_id_in_database = get_student_id_in_database(student=student, cursor=cursor)
     cursor.execute(
         f"""UPDATE output_parameters 
             SET (start_lesson, end_lesson, room_number, teacher_name, subject) = 
             ({new_parameters['start_lesson']}, {new_parameters['end_lesson']}, {new_parameters['room_number']}, 
             {new_parameters['teacher_name']}, {new_parameters['subject']}) 
-            WHERE student_id = {student_id};"""
+            WHERE student_id = {student_id_in_database};"""
     )
     return True
 
 
 @wrapper_database
-def get_output_parameters(student_id: int, cursor=None):
-    student = Student(user_id=student_id, name='lorem', surname='ipsum')
-    student_id = get_student_id(student=student, cursor=cursor)
+def get_output_parameters(user_id: int, cursor=None):
+    student = Student(user_id=user_id)
+    student_id_in_database = get_student_id_in_database(student=student, cursor=cursor)
     cursor.execute(
         f"""SELECT start_lesson, end_lesson, room_number, teacher_name, subject
             FROM output_parameters 
-            WHERE student_id = '{student_id}';"""
+            WHERE student_id = '{student_id_in_database}';"""
     )
     raw_parameters = cursor.fetchone()
     parameters = {
@@ -96,7 +96,30 @@ def get_output_parameters(student_id: int, cursor=None):
 
 
 @wrapper_database
-def get_group_id(group: Group, cursor=None) -> str:
+def get_student_groups(user_id: int, cursor=None):
+    """
+    Gives a list of groups that the student has chosen.
+
+    :param user_id:
+    :param cursor:
+    :return:
+    """
+    student = Student(user_id=user_id)
+    student_id_in_database = get_student_id_in_database(student=student, cursor=cursor)
+    cursor.execute(
+        f"""
+        SELECT school_group_id
+        FROM student_school_group 
+        WHERE student_id = '{student_id_in_database}' 
+    ;""")
+    list_groups = []
+    for group_id in cursor.fetchall():
+        list_groups.append(get_group(group_id_in_database=group_id[0], cursor=cursor))
+    return list_groups
+
+
+@wrapper_database
+def get_group_id_in_database(group: Group, cursor=None) -> str:
     """
     Gives group's id in database.
 
@@ -113,18 +136,18 @@ def get_group_id(group: Group, cursor=None) -> str:
 
 
 @wrapper_database
-def get_group(group_id: int, cursor=None) -> Group:
+def get_group(group_id_in_database: int, cursor=None) -> Group:
     cursor.execute(
         f"""SELECT number, letter, subclass
             FROM school_group 
-            WHERE id = '{group_id}';"""
+            WHERE id = '{group_id_in_database}';"""
     )
     number, letter, subclass = cursor.fetchone()
     return Group(number=number, letter=letter, subclass=subclass)
 
 
 @wrapper_database
-def get_student_id(student: Student, cursor=None) -> int:
+def get_student_id_in_database(student: Student, cursor=None) -> int:
     """
     Gives student's id in database.
 
@@ -142,41 +165,18 @@ def get_student_id(student: Student, cursor=None) -> int:
 
 
 @wrapper_database
-def get_student(student_id: int, cursor=None) -> Student:
-    student = Student(user_id=student_id, name='lorem', surname='ipsum')
-    student_id = get_student_id(student=student, cursor=cursor)
+def get_student(user_id: int, cursor=None) -> Student:
+    student = Student(user_id=user_id)
+    student_id_in_database = get_student_id_in_database(student=student, cursor=cursor)
     cursor.execute(
         f"""
         SELECT user_id, name, surname
         FROM student 
-        WHERE id = '{student_id}' 
+        WHERE id = '{student_id_in_database}' 
     ;"""
     )
     user_id, name, surname = cursor.fetchone()
     return Student(user_id=user_id, name=name, surname=surname)
-
-
-@wrapper_database
-def get_student_groups(student_id: int, cursor=None):
-    """
-    Gives a list of groups that the student has chosen.
-
-    :param student_id:
-    :param cursor:
-    :return:
-    """
-    student = Student(user_id=student_id, name='lorem', surname='ipsum')
-    student_id = get_student_id(student=student, cursor=cursor)
-    cursor.execute(
-        f"""
-        SELECT school_group_id
-        FROM student_school_group 
-        WHERE student_id = '{student_id}' 
-    ;""")
-    list_groups = []
-    for group_id in cursor.fetchall():
-        list_groups.append(get_group(group_id=group_id[0], cursor=cursor))
-    return list_groups
 
 
 @wrapper_database

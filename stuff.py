@@ -27,7 +27,7 @@ class Group:
 
 class Student:
 
-    def __init__(self, user_id, name, surname='', method=None):
+    def __init__(self, user_id, name='no name', surname='', method=None):
         self.method = method
         self.user_id = user_id
         if self.method is not None:

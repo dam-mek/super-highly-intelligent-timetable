@@ -93,7 +93,7 @@ def registration_ask_subclass(event, information_about_student):
         group = Group(number=information_about_student['number_group'],
                       letter=information_about_student['letter_group'],
                       subclass=another_subclass)
-        databaseAgent.connect_student_and_class(student_id=chat_id, group=group)
+        databaseAgent.connect_student_and_class(user_id=chat_id, group=group)
     welcoming(chat_id=chat_id, information_about_student=information_about_student)
 
 
@@ -119,7 +119,7 @@ def settings(event):
     text = bot.get_text(event).lower()
     chat_id = bot.get_chat_id(event)
     if text.lower() == 'параметры вывода':
-        output_parameters = databaseAgent.get_output_parameters(student_id=chat_id)
+        output_parameters = databaseAgent.get_output_parameters(user_id=chat_id)
         message_text = messages.SETTINGS_PARAMETERS_OUTPUT.format(
             start_lesson='🟢' if output_parameters['start_lesson'] else '🔴',
             end_lesson='🟢' if output_parameters['end_lesson'] else '🔴',
@@ -135,16 +135,23 @@ def settings(event):
             output_parameters=output_parameters,
         )
 
-    if text.lower() == 'в главное меню':
+    elif text.lower() == 'в главное меню':
         bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
+
+    elif text.lower() == 'в главное меню':
+        bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
+                         reply_markup=markups.menu)
+
+    else:
+        problem_request(event)
 
 
 def change_output_parameter(event, output_parameters):
     text = bot.get_text(event).lower()
     chat_id = bot.get_chat_id(event)
     if text == 'в главное меню':
-        databaseAgent.change_output_parameters(student_id=chat_id, new_parameters=output_parameters)
+        databaseAgent.change_output_parameters(user_id=chat_id, new_parameters=output_parameters)
         bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
         return
@@ -202,7 +209,7 @@ def command_send_groups(event):
 
 def ask_user_class(event):
     chat_id = bot.get_chat_id(event)
-    user_classes = databaseAgent.get_student_groups(student_id=chat_id)
+    user_classes = databaseAgent.get_student_groups(user_id=chat_id)
     if user_classes is None:
         bot.send_message(chat_id=chat_id, text=messages.STUDENT_DOESNT_HAVE_GROUPS,
                          reply_markup=markups.menu)
@@ -256,7 +263,7 @@ def send_timetable(event, needed_class):
 
     text_timetable = get_text_timetable(needed_class=needed_class,
                                         needed_date=needed_date,
-                                        output_parameters=databaseAgent.get_output_parameters(student_id=chat_id))
+                                        output_parameters=databaseAgent.get_output_parameters(user_id=chat_id))
     chat_id = bot.send_message(chat_id=chat_id, text=text_timetable,
                                reply_markup=markups.menu)
     # bot.register_next_step_handler(
@@ -270,13 +277,3 @@ def send_timetable(event, needed_class):
 def problem_request(event):
     chat_id = bot.get_chat_id(event)
     bot.send_message(chat_id=chat_id, reply_markup=markups.menu, text=messages.PROBLEM_REQUEST)
-
-# @bot.callback_query_handler(func=lambda call: True)
-# def callback_inline(call):
-#     if call.data:
-#         mediator.change_parameter(telegram_user_id=call.message.chat.id, parameter=call.data)
-#         bot.edit_message_reply_markup(chat_id=call.message.chat.id,
-#                                       message_id=call.message.message_id,
-#                                       reply_markup=markups.get_parameters_output_inline_markup(
-#                                           **mediator.get_parameters_output(telegram_user_id=call.message.chat.id)
-#                                       ))
