@@ -46,20 +46,13 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
     timetable = get_timetable(needed_class=needed_class,
                               day=str(needed_date.day),
                               month=str(needed_date.month))
-    print()
-    print()
-    print()
-    print(timetable, output_parameters)
+
     # очищием расписание от ненужных параметров
     for i in range(len(timetable)):
         for key in timetable[i]:
-            print(key)
-            if key not in output_parameters:
+            if output_parameters[key]:
                 del timetable[i][key]
-    print(timetable)
-    print()
-    print()
-    print()
+
     day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
 
     timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]} {str(needed_class).upper()}\n\n"
