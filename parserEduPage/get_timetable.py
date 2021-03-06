@@ -46,8 +46,9 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
     raw_timetable = get_timetable(needed_class=needed_class,
                                   day=str(needed_date.day),
                                   month=str(needed_date.month))
+    raw_timetable.sort(key=lambda info: datetime.datetime.strptime(info['start_lesson'], '%H:%M'))
 
-    timetable = [dict()] * len(raw_timetable)
+    timetable = [dict() for _ in range(len(raw_timetable))]
     # очищием расписание от ненужных параметров
     for i in range(len(raw_timetable)):
         for key in raw_timetable[i]:
@@ -57,7 +58,7 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
     day_in_week = calendar.weekday(year=2021, month=needed_date.month, day=needed_date.day)
 
     timetable_text = f"{needed_date.strftime('%d.%m.%y')} {weekend[day_in_week]} {str(needed_class).upper()}\n\n"
-    for subject in sorted(timetable, key=lambda info: datetime.datetime.strptime(info['start_lesson'], '%H:%M')):
+    for subject in timetable:
         if 'start_lesson' in subject:
             timetable_text += f"""{subject['start_lesson']}"""
             if 'end_lesson' in subject:
