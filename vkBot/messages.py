@@ -45,3 +45,15 @@ SENDING_TIMETABLE_ASK_DATE = """Выберите нужную дату"""
 STUDENT_DOESNT_HAVE_GROUPS = """Вы не выбрали никакой класс, выберите его в настройках"""
 
 PROBLEM_REQUEST = """Капец, я не понял, чо вам надо, попробуйте ещё раз или пишите даммеку"""
+
+REQUEST_REMAINING_TIME_ERROR_0 = """До звонка {time}"""
+
+REQUEST_REMAINING_TIME_ERROR_1 = """Сейчас перемена, до звонка {time}"""
+
+REQUEST_REMAINING_TIME_ERROR_2 = """Сегодня воскресенье, не учимся"""
+
+REQUEST_REMAINING_TIME_ERROR_3 = """Уроки уже закончились, вы поздно"""
+
+REQUEST_REMAINING_TIME_ERROR_4 = """Уроки ещё не начались, вы рано"""
+
+REQUEST_REMAINING_TIME_ERROR_5 = PROBLEM_REQUEST

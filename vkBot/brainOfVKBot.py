@@ -2,7 +2,7 @@ from os import environ
 
 from vkBot.VKontakteBot import VKontakteBot
 from vkBot import markups, messages
-from stuff import get_subclasses, Group, Student
+from stuff import *
 from parserEduPage.get_timetable import get_text_timetable
 from database import databaseAgent
 from logger import log_this, send_mail
@@ -139,10 +139,6 @@ def settings(event):
         bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
                          reply_markup=markups.menu)
 
-    elif text.lower() == 'в главное меню':
-        bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
-                         reply_markup=markups.menu)
-
     else:
         problem_request(event)
 
@@ -186,7 +182,7 @@ def change_output_parameter(event, output_parameters):
     )
     
 
-@bot.message_handler(command='скинь расписание')
+@bot.message_handler(command='Скинь расписание')
 def command_send_timetable(event):
     ask_user_class(event)
     # bot.register_next_step_handler(
@@ -196,15 +192,32 @@ def command_send_timetable(event):
     # )
 
 
-@bot.message_handler(command='скинь группы')
+@bot.message_handler(command='Скинь группы')
 def command_send_groups(event):
     bot.send_message(chat_id=bot.get_chat_id(event), text=str(databaseAgent.get_groups()),
                      reply_markup=markups.menu)
-    # bot.register_next_step_handler(
-    #     chat_id=bot.send_message(chat_id=chat_id, text=messages.SETTINGS_INTRODUCING,
-    #                              reply_markup=markups.choose_day_timetable),
-    #     callback=send_timetable
-    # )
+
+
+@bot.message_handler(command='Покажи время до звонка')
+def command_send_groups(event):
+    chat_id = bot.get_chat_id(event)
+    error_code, remaining_time = get_remaining_time()
+    if error_code == 5:
+        message_text = messages.REQUEST_REMAINING_TIME_ERROR_5
+    elif error_code == 4:
+        message_text = messages.REQUEST_REMAINING_TIME_ERROR_4
+    elif error_code == 3:
+        message_text = messages.REQUEST_REMAINING_TIME_ERROR_3
+    elif error_code == 2:
+        message_text = messages.REQUEST_REMAINING_TIME_ERROR_2
+    elif error_code == 1:
+        message_text = messages.REQUEST_REMAINING_TIME_ERROR_1.format(time=get_text_time(remaining_time.seconds))
+    elif error_code == 0:
+        message_text = messages.REQUEST_REMAINING_TIME_ERROR_0.format(time=get_text_time(remaining_time.seconds))
+    else:
+        message_text = 'я ваще хз'
+    bot.send_message(chat_id=chat_id, text=message_text,
+                     reply_markup=markups.menu)
 
 
 def ask_user_class(event):

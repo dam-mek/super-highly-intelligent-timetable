@@ -33,7 +33,7 @@ def get_subclasses_markup(number: str, letter: str):
 menu = VkKeyboard(one_time=False)
 menu.add_button('Скинь расписание')
 menu.add_line()
-menu.add_button('Покажи время до конца пары')
+menu.add_button('Покажи время до звонка')
 menu.add_line()
 menu.add_button('Настройки')
 menu.add_line()
