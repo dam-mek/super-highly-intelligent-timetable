@@ -35,6 +35,7 @@ def webhook():
     # bot.set_webhook(url='https://super-highly-intelligent-tt.herokuapp.com/' + token)
     data = json.loads(request.data)
     print(data)
+    print(request.headers.get('X-Retry-Counter'))
     if 'type' not in data.keys():
         return 'fuck type'
     if data['type'] == 'confirmation':
