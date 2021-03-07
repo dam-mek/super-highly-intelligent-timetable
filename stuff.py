@@ -1,5 +1,4 @@
 import datetime
-import time
 import pytz
 
 timezone = pytz.timezone('Etc/GMT-7')
