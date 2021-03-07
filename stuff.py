@@ -41,9 +41,10 @@ def get_remaining_time() -> (int, datetime.timedelta):
 
     :return: int the cod and time to bell
     """
-    now = datetime.datetime.now()
 
-    if now.weekday() == 6 and False:
+    now = datetime.datetime.now(tz=timezone)
+
+    if now.weekday() == 6:
         return 2, now.time()
 
     now_time = now.time()
