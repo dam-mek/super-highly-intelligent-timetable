@@ -43,7 +43,7 @@ def get_remaining_time() -> (int, datetime.timedelta):
     """
     now = datetime.datetime.now()
 
-    if now.weekday() == 6:
+    if now.weekday() == 6 and False:
         return 2, now.time()
 
     now_time = now.time()
@@ -71,7 +71,7 @@ def get_remaining_time() -> (int, datetime.timedelta):
         lambda p: (datetime.datetime.strptime(p[0], '%H:%M').time(), datetime.datetime.strptime(p[1], '%H:%M').time()),
         schedule
     ))
-
+    print(now_time, schedule[0])
     if now_time < schedule[0][0]:
         return 4, now_time
 
