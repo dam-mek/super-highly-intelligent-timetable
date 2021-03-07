@@ -43,7 +43,7 @@ def get_remaining_time() -> (int, datetime.timedelta):
     """
     now = datetime.datetime.now()
 
-    if now.weekday() == 6 and False:
+    if now.weekday() == 6:
         return 2, now.time()
 
     now_time = now.time()
