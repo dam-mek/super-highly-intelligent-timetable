@@ -64,6 +64,7 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
         'всеоб.ист': 'Всеобщая история',
         'изо': 'Изобразительное искусство',
         'истор': 'История',
+        'мхк': 'Мы Хотим Какать',
     }
 
     print(needed_class)
