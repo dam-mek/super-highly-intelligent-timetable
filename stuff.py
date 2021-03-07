@@ -44,7 +44,7 @@ def get_remaining_time() -> (int, datetime.timedelta):
 
     now = datetime.datetime.now(tz=timezone)
 
-    if now.weekday() == 6 and False:
+    if now.weekday() == 6:
         return 2, now.time()
 
     now_time = now.time()
@@ -66,6 +66,8 @@ def get_remaining_time() -> (int, datetime.timedelta):
         ('14:05', '14:45'),
         ('14:55', '15:35'),
         ('15:50', '16:30'),
+        ('16:40', '17:20'),
+        ('17:25', '18:05'),
     ]
 
     schedule = list(map(
@@ -106,7 +108,7 @@ def get_text_time(seconds: int) -> str:
         text_time += f'{minutes} минут{ending}'
 
     if minutes and seconds:
-        text_time += ' '
+        text_time += ' и '
 
     if seconds:
         form = get_numeral_form(seconds)
