@@ -65,6 +65,7 @@ def get_text_timetable(needed_class, needed_date, output_parameters):
         'изо': 'Изобразительное искусство',
         'истор': 'История',
         'мхк': 'Мы Хотим Какать',
+        'особ.разв.рос ': 'Особености развития российского государства',
     }
 
     print(needed_class)
