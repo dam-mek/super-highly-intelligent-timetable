@@ -37,7 +37,7 @@ class VKontakteBot:
                 if handler['command'] == '':
                     handler['function'](event)
 
-    def send_message(self, chat_id, text, reply_markup=None):
+    def send_message(self, chat_id, text, reply_markup=None, reply_to_id=None):
         print(chat_id, text)
         arguments = dict(
             peer_id=chat_id,
@@ -46,6 +46,8 @@ class VKontakteBot:
         )
         if reply_markup is not None:
             arguments['keyboard'] = reply_markup.get_keyboard()
+        if reply_to_id is not None:
+            arguments['reply_to'] = reply_to_id
         self.vk.messages.send(**arguments)
         return chat_id
 

@@ -302,4 +302,5 @@ def send_timetable(event, needed_class):
 @bot.message_handler(command='')
 def problem_request(event):
     chat_id = bot.get_chat_id(event)
-    bot.send_message(chat_id=chat_id, reply_markup=markups.menu, text=messages.PROBLEM_REQUEST)
+    bot.send_message(chat_id=chat_id, reply_markup=markups.menu,
+                     text=messages.PROBLEM_REQUEST, reply_to_id=event['object']['message']['conversation_message_id'])
