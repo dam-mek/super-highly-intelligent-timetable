@@ -265,7 +265,9 @@ def send_timetable(event, needed_class):
                          reply_markup=markups.menu)
         return
 
-    if text == 'сегодня':
+    if text == 'вчера':
+        needed_date = 'yesterday'
+    elif text == 'сегодня':
         needed_date = 'today'
     elif text == 'завтра':
         needed_date = 'tomorrow'
