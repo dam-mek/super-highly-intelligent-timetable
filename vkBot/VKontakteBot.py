@@ -48,7 +48,12 @@ class VKontakteBot:
             arguments['keyboard'] = reply_markup.get_keyboard()
         if reply_to_id is not None:
             arguments['reply_to'] = reply_to_id
+            print(self.vk.messages.getByConversationMessageId(
+                peer_id=chat_id,
+                conversation_message_ids=str(reply_to_id),
+            ))
         print(arguments)
+
         self.vk.messages.send(**arguments)
         return chat_id
 
