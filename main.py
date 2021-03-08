@@ -39,7 +39,7 @@ def webhook():
     if request.headers.get('X-Retry-Counter') == '1':
         print('ok')
         response = Response(status=429)
-        response.headers['Retry-After'] = 10
+        response.headers['Retry-After'] = '10'
         return response
     if 'type' not in data.keys():
         return 'fuck type'
