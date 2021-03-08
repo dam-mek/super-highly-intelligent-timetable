@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import json
 
 from vkBot.brainOfVKBot import *
@@ -35,8 +35,11 @@ def webhook():
     # bot.set_webhook(url='https://super-highly-intelligent-tt.herokuapp.com/' + token)
     data = json.loads(request.data)
     print(data)
-    print(request.headers.get('X-Retry-Counter'))
-    if 'type' not in data.keys():
+    if request.headers.get('X-Retry-Counter') == 1:
+        response = Response(status=429)
+        response.headers['Retry-After'] = 15
+        return response
+    elif 'type' not in data.keys():
         return 'fuck type'
     if data['type'] == 'confirmation':
         return '253d2422'
