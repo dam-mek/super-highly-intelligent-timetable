@@ -38,7 +38,7 @@ def webhook():
     print('X-Retry-Counter', request.headers.get('X-Retry-Counter'), type(request.headers.get('X-Retry-Counter')))
     if request.headers.get('X-Retry-Counter') == '1':
         print('ok')
-        response = Response(status=429)
+        response = Response(response='15', status=429)
         response.headers['Retry-After'] = '15'
         return response
     if 'type' not in data.keys():
