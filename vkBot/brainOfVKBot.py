@@ -192,6 +192,17 @@ def command_send_timetable(event):
     # )
 
 
+@bot.message_handler(command='О боте')
+def command_send_timetable(event):
+    egor_id = event['object']['message']['from_id']
+    chat_id = bot.get_chat_id(event)
+    if egor_id == 216533425:
+        bot.send_message(chat_id=chat_id, text='Да ничо я тебе не скажу, отвали от меня',
+                         reply_markup=markups.menu),
+    else:
+        problem_request(event)
+
+
 @bot.message_handler(command='Скинь группы')
 def command_send_groups(event):
     bot.send_message(chat_id=bot.get_chat_id(event), text=str(databaseAgent.get_groups()),
