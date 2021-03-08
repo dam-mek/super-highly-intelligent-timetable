@@ -77,13 +77,10 @@ class VKontakteBot:
     @staticmethod
     def get_text(event):
         raw_text = event['object']['message']['text']
-        if raw_text.startswith('[club202506545|'):
-            if len(raw_text.split()) == 1:
-                text = 'помощь'
-            else:
-                text = raw_text[raw_text.find(' ') + 1:]
-        else:
-            text = raw_text
+        raw_text = raw_text.replace('[club202506545|@superhighlyintelligenttimetable]', '')
+        text = raw_text.strip()
+        if not text:
+            text = 'помощь'
         return text
 
     @staticmethod
